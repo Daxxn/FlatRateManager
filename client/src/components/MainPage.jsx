@@ -60,10 +60,7 @@ class MainPage extends Component {
    * Sends GET request for all JOBS.
    */
   getallJobsDB() {
-    fetch(this.props.APIData.APIBase + this.props.APIData.APIJobs, {
-      method: this.props.APIData.methods.get,
-      headers: this.props.APIData.headers,
-    })
+    fetch(this.URLBuilder.buildURL('/jobs'), this.URLBuilder.buildGetMessage())
     .then((res) => {
       res.json()
         .then((data) => {
@@ -90,11 +87,7 @@ class MainPage extends Component {
    * @param {string} id _id element from MongoDB Object.
    */
   getOneVehicle(id) {
-    fetch(this.URLBuilder.buildURL('/vehicles', id),
-    {
-      method: this.URLBuilder.APIData.methods.get,
-      headers: this.URLBuilder.APIData.headers,
-    })
+    fetch(this.URLBuilder.buildURL('/vehicles', id), this.URLBuilder.buildGetMessage())
     .then((res) => {
       res.json()
       .then((data) => {
@@ -119,6 +112,13 @@ class MainPage extends Component {
         message: err,
       });
     });
+  }
+
+  postVehicle(vehicle) {
+    fetch(this.URLBuilder.buildPlainURL('/vehicles'), this.URLBuilder.buildPostMessage(vehicle))
+    .then((data) => {
+
+    })
   }
   //#endregion
 

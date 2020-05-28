@@ -1,5 +1,8 @@
 import APIControl from "./APIControl";
 
+/**
+ * Doesnt work.
+ */
 export default class JobsControl extends APIControl {
   constructor(APIData) {
     super(APIData);
