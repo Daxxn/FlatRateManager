@@ -4,6 +4,7 @@ import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobDisplay';
 import '../styles/MainPage.css';
 import APIControl from '../APIControls/APIControl';
+import VehicleList from './VehicleList';
 
 class MainPage extends Component {
   constructor(props) {
@@ -24,6 +25,12 @@ class MainPage extends Component {
     this.getOneVehicle = this.getOneVehicle.bind(this);
 
     this.selectVehicleTest = this.selectVehicleTest.bind(this);
+    this.updateVehicle = this.updateVehicle.bind(this);
+  }
+
+  componentDidMount() {
+    this.getallVehiclesDB();
+    this.getallJobsDB();
   }
 
   //#region API Fetch Requests
@@ -143,6 +150,19 @@ class MainPage extends Component {
       selectedVehicleIndex: index,
     });
   }
+
+  //#region Vehicle Controls
+  updateVehicle(id, key, data) {
+    const newVehicle = this.findObject(id, this.state.allVehicles);
+    const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
+    newVehicle[key] = data;
+    console.log(newVehicle[key]);
+    this.setState(prevState => {
+      prevState.allVehicles[index] = newVehicle;
+      return { allVehicles: prevState.allVehicles };
+    });
+  }
+  //#endregion
   
   //#region Helper Methods:
   /**
@@ -163,14 +183,18 @@ class MainPage extends Component {
       message: new Error('Could not find an id.'),
     });
   }
+
+  findObject(id, array) {
+    return array.find(veh => veh._id === id);
+  }
   //#endregion
 
-  render() { 
+  render() {
     return (
       <div className="maincontainer">
         <div className="datadisplaycontainer"> 
           <p>Data Output</p>
-          <VehicleDisplay allVehicles={this.state.allVehicles} selectTest={this.selectVehicleTest} selectedIndex={this.state.selectedVehicleIndex}/>
+          <VehicleList allVehicles={this.state.allVehicles} updateVehicles={this.updateVehicle}/>
           <JobDisplay allJobs={this.state.allJobs} />
         </div>
         <div className="controlscontainer">
