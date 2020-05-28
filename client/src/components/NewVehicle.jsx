@@ -26,7 +26,9 @@ class NewVehicle extends Component {
         <div>
           <p>New Vehicle</p>
           <p>Make:</p>
-          <input type="text" onChange={this.handleInput} />
+          <input id="make" type="text" onChange={this.handleInput} />
+          <input id="model" type="text" onChange={this.handleInput} />
+          <input id="year" type="number" onChange={this.handleInput} />
         </div>
       </li>
     );
