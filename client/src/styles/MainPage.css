@@ -1,0 +1,26 @@
+.maincontainer {
+  display: grid;
+  grid-template-columns: 60% 40%;
+}
+
+.controlscontainer {
+  display: grid;
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.getbuttonsitem {
+  grid-row: 1;
+}
+
+.vehicleform {
+  grid-row: 2;
+}
+
+.datadisplaycontainer {
+  border: solid 2px #555555;
+  border-radius: 12px;
+  padding: 8px;
+  background-color: #f0f5ff;
+
+  grid-column: 1 / 2;
+}

@@ -1,0 +1,12 @@
+.liststyle {
+  text-align: left;
+  border: 1px solid #6ecbf7;
+}
+
+.item {
+  background-color: azure;
+}
+
+.item.selected {
+  background-color: aqua;
+}

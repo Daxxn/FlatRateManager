@@ -1,0 +1,20 @@
+.joblist {
+  text-align: left;
+  border: solid 1px #4187b6;
+  margin: 5px;
+  padding: -2px;
+  transition: margin 0.2s, background-color 0.2s;
+}
+
+.jobframe {
+  text-align: left;
+  border: solid 2px #535353;
+  margin: 2px;
+  padding: 2px;
+}
+
+.joblist:hover {
+  /* border: #4187b6 4px solid; */
+  margin: 20px 5px 20px 5px;
+  background-color: #d3d3d3;
+}
