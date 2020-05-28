@@ -51,7 +51,7 @@ export default class APIControl {
    */
   buildPostMessage(body) {
     return {
-      method: this.APIData.method.post,
+      method: this.APIData.methods.post,
       headers: this.APIData.headers,
       body: JSON.stringify(body),
     };

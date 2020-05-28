@@ -1,19 +1,19 @@
 require('dotenv/config');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-var mongoose = require('mongoose');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const jobRouter = require('./routes/Jobs');
 const vehicleRouter = require('./routes/Vehicles');
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -33,12 +33,13 @@ app.use('/jobs', jobRouter);
 app.use('/vehicles', vehicleRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -48,13 +49,13 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-mongoose.connect(process.env.DB_CONNECT, 
+mongoose.connect(process.env.DB_CONNECT,
   {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   },
   (err) => {
-  console.log('Error: ', err);
-})
+    console.log('Error: ', err);
+  });
 
 module.exports = app;

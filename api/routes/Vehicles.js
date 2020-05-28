@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const VehicleModel = require('../models/VehicleModel');
 
@@ -7,7 +8,7 @@ router.get('/', async (req, res) => {
     const vehicles = await VehicleModel.find();
     res.json(vehicles);
   } catch (err) {
-    res.json({message: err});
+    res.json({ message: err });
   }
 });
 
@@ -22,7 +23,15 @@ router.post('/', async (req, res) => {
     const savedVehicle = await newVehicle.save();
     res.json(savedVehicle);
   } catch (err) {
-    res.json({message: err});
+    res.json({ message: err });
+  }
+});
+
+router.put('/', async (req, res) => {
+  try {
+    res.json({ message: req.body });
+  } catch (err) {
+    res.json({ message: err });
   }
 });
 

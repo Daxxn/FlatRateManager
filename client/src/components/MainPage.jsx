@@ -4,6 +4,7 @@ import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobDisplay';
 import '../styles/MainPage.css';
 import APIControl from '../APIControls/APIControl';
+import MessageDisplay from './messageDisplay';
 
 class MainPage extends Component {
   constructor(props) {
@@ -22,8 +23,14 @@ class MainPage extends Component {
     this.onGetVehiclesClick = this.onGetVehiclesClick.bind(this);
     this.onGetJobsClick = this.onGetJobsClick.bind(this);
     this.getOneVehicle = this.getOneVehicle.bind(this);
+    this.newJobHandler = this.newJobHandler.bind(this);
 
     this.selectVehicleTest = this.selectVehicleTest.bind(this);
+  }
+
+  componentDidMount() {
+    this.getallVehiclesDB();
+    this.getallJobsDB();
   }
 
   //#region API Fetch Requests
@@ -116,12 +123,38 @@ class MainPage extends Component {
 
   postVehicle(vehicle) {
     fetch(this.URLBuilder.buildPlainURL('/vehicles'), this.URLBuilder.buildPostMessage(vehicle))
-    .then((data) => {
-
+    .then((res) => {
+      res.json()
+      .then((msg) => {
+        this.setState({ message: msg });
+      })
+      .catch((err) => {
+        this.setState({ message: err });
+      })
     })
+    .catch((err) => {
+      this.setState({ message: err });
+    })
+  }
+
+  postJobDB(job) {
+    fetch(this.URLBuilder.buildPlainURL('/jobs'), this.URLBuilder.buildPostMessage(job))
+    .then((res) => {
+      res.json()
+      .then((msg) => {
+        this.setState({ message: msg.message });
+      })
+      .catch((err) => {
+        this.setState({ message: err });
+      })
+    })
+    .catch((err) => {
+      this.setState({ message: err });
+    });
   }
   //#endregion
 
+  //#region Click Events
   onGetVehiclesClick() {
     this.getallVehiclesDB();
   }
@@ -143,6 +176,18 @@ class MainPage extends Component {
       selectedVehicleIndex: index,
     });
   }
+
+  newJobHandler(newJobFunc, clearFunc) {
+    const newJob = newJobFunc();
+    // this.setState(prevState => {
+    //   prevState.allJobs.push(newJob);
+    //   return { allJobs: prevState.allJobs };
+    // });
+    this.postJobDB(newJob);
+    this.getallJobsDB();
+    clearFunc();
+  }
+  //#endregion
   
   //#region Helper Methods:
   /**
@@ -165,23 +210,25 @@ class MainPage extends Component {
   }
   //#endregion
 
-  render() { 
+  render() {
+    const { allVehicles, selectedVehicleIndex, allJobs, message, selectedVehicleID, returnedVehicle } = this.state;
     return (
       <div className="maincontainer">
         <div className="datadisplaycontainer"> 
           <p>Data Output</p>
-          <VehicleDisplay allVehicles={this.state.allVehicles} selectTest={this.selectVehicleTest} selectedIndex={this.state.selectedVehicleIndex}/>
-          <JobDisplay allJobs={this.state.allJobs} />
+          <VehicleDisplay allVehicles={allVehicles} selectTest={this.selectVehicleTest} selectedIndex={selectedVehicleIndex}/>
+          <JobDisplay allJobs={allJobs} newClick={this.newJobHandler} />
+          <MessageDisplay message={message} />
         </div>
         <div className="controlscontainer">
           <div className="getbuttonsitem">
             <button type="button" onClick={this.onGetVehiclesClick}>GET Vehicles</button>
             <button type="button" onClick={this.onGetJobsClick}>GET Jobs</button>
-            <button type="button" onClick={() => {this.getOneVehicle(this.state.selectedVehicleID)}}>GET Selected vehicle</button>
+            <button type="button" onClick={() => {this.getOneVehicle(selectedVehicleID)}}>GET Selected vehicle</button>
           </div>
         </div>
         <div>
-          {this.state.returnedVehicle === (undefined || null) ? <p></p> : <p>{this.state.returnedVehicle.model}</p>}
+          {returnedVehicle === (undefined || null) ? <p></p> : <p>{returnedVehicle.model}</p>}
         </div>
       </div>
     );

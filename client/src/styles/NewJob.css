@@ -1,0 +1,41 @@
+.newjobframe {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  row-gap: 2px;
+  grid-template-areas: 
+    "title"
+    "job-label"
+    "job-input"
+    "time-label"
+    "time-input"
+    "button";
+
+  border: solid 1px #4187b6;
+  margin: 2px;
+  padding: 10px 2px 10px 2px;
+  text-align: center;
+}
+
+.title {
+  grid-area: title;
+}
+
+.joblabel {
+  grid-area: job-label;
+}
+
+.jobinput {
+  grid-area: job-input;
+}
+
+.time-label {
+  grid-area: time-label;
+}
+
+.timeinput {
+  grid-area: time-input;
+}
+
+.button {
+  grid-area: button;
+}

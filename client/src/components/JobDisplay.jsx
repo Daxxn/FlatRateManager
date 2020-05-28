@@ -1,21 +1,24 @@
 import React, { Component } from 'react';
 import '../styles/JobDisplay.css';
 import PropTypes from 'prop-types';
+import NewJob from './newJob';
 
 class JobDisplay extends Component {
   render() {
-    const jobData = this.props.allJobs !== undefined ? this.props.allJobs.map((job) => {
+    const {allJobs, newClick} = this.props;
+    const jobData = allJobs !== undefined ? allJobs.map((job) => {
       return (
-        <ol key={job._id} className="joblist">
+        <ul key={job._id} className="joblist">
           <li><b>Job</b>: {job.job}</li>
           <li><b>Time</b>: {job.time}</li>
-        </ol>
+        </ul>
         )
       }) : (<ul></ul>)
     return (
       <div>
         <ol className="jobframe">
           {jobData}
+          <NewJob newJobHandle={newClick}/>
         </ol>
       </div>
     );
@@ -23,5 +26,6 @@ class JobDisplay extends Component {
 }
 JobDisplay.propTypes = {
   allJobs: PropTypes.arrayOf(PropTypes.object),
+  newClick: PropTypes.func.isRequired,
 };
 export default JobDisplay;

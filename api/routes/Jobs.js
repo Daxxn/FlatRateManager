@@ -1,4 +1,5 @@
 const express = require('express');
+
 const router = express.Router();
 const JobModel = require('../models/JobModel');
 
@@ -7,7 +8,7 @@ router.get('/', async (req, res) => {
     const jobs = await JobModel.find();
     res.json(jobs);
   } catch (err) {
-    res.json({message: err});
+    res.json({ message: err });
   }
 });
 
@@ -17,11 +18,19 @@ router.post('/', async (req, res) => {
     time: req.body.time,
   });
   try {
-    const savedJob = await newJob.save();
-    res.json(savedJob);
+    await newJob.save();
+    res.json({ message: 'passed' });
   } catch (err) {
-    res.json({message: err});
+    res.json({ message: err });
   }
-})
+});
+
+router.put('/', (req, res) => {
+  try {
+    console.log(req.body);
+  } catch (err) {
+    res.json({ message: err });
+  }
+});
 
 module.exports = router;
