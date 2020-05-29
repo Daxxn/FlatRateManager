@@ -26,4 +26,22 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.patch('/:id', async (req, res) => {
+  try {
+    const newVehicle = new VehicleModel({
+      make: req.body.make,
+      model: req.body.model,
+      year: req.body.year,
+      jobs: req.body.jobs
+    });
+    const response = await VehicleModel.replaceOne(req.params.id, newVehicle);
+    res.json({message: response});
+  } catch(err) {
+    res.json({message: err});
+  }
+  // VehicleModel.updateOne({_id: req.params.id}, newVehicle, (err) => {
+  //   res.json({message: err});
+  // }).
+})
+
 module.exports = router;
