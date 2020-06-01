@@ -21,7 +21,23 @@ function findManyJobs(jobIds) {
   for (const jobId of jobIds) {
     promises.push(findJobById(jobId));
   }
-  return new Promise.all(promises);
+  return Promise.all(promises);
+}
+
+function patchMany(req, next) {
+  if(req.body.ids && req.body.jobs) {
+    findManyJobs(req.body.ids)
+      .then((foundJobs) => {
+        foundJobs.forEach((job, i) => {
+          job = Object.assign(job, req.body.jobs[i]);
+          job.save();
+        });
+        console.log(foundJobs);
+        return foundJobs;
+      })
+  } else {
+    next(new Error('Either id array or job array is not defined.'));
+  }
 }
 
 router.get('/', (req, res) => {
@@ -47,8 +63,8 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/:vehicleId', (req, res, next) => {
-  findJobById(req.params.vehicleId)
+router.post('/:jobId', (req, res, next) => {
+  findJobById(req.params.jobId)
     .then((job) => {
       if (req.body) {
         if (!req.body._id) {
@@ -87,31 +103,50 @@ router.post('/', (req, res, next) => {
 })
 
 router.patch('/:id', (req, res, next) => {
-  findJobById(req.params.id)
-    .then((job) => {
-      if (req.body) {
-        job = Object.assign(job, req.body);
-        job.save();
-        res.status(200).json(job);
-      } else {
-        throw new Error('body must be an object with assignable parameters.');
-      }
-    })
-    .catch((err) => {
-      next(err);
-    });
+  if (req.params.id === 'many') {
+    const response = patchMany(req, next);
+    res.status(200).json({
+      message: "saved",
+      data: response});
+  } else {
+    findJobById(req.params.id)
+      .then((job) => {
+        if (req.body) {
+          job = Object.assign(job, req.body);
+          job.save();
+          //res.status(200).json(job);
+          res.status(200).json({
+            message: "saved",
+            data: job,
+          });
+        } else {
+          throw new Error('body must be an object with assignable parameters.');
+        }
+      })
+      .catch((err) => {
+        //next(err);
+        res.status(500).json({
+          message: 'ERROR',
+          data: err,
+        });
+      });
+  }
 });
 
-router.patch('/many', (req, res, next) => {
-  if(req.body.ids && req.body.jobs) {
-    findManyJobs(req.body.ids)
-      .then((foundJobs) => {
-        
-      })
-  } else {
-    next(new Error('Either id array or job array is not defined.'));
-  }
-})
+// router.patch('/many/', (req, res, next) => {
+//   if(req.body.ids && req.body.jobs) {
+//     findManyJobs(req.body.ids)
+//       .then((foundJobs) => {
+//         // foundJobs.forEach((job) => {
+//         //   job.save();
+//         // });
+//         console.log(foundJobs);
+//         res.status(200).json(foundJobs);
+//       })
+//   } else {
+//     next(new Error('Either id array or job array is not defined.'));
+//   }
+// })
 
 router.delete('/:id', (req, res, next) => {
   JobModel.findByIdAndDelete(req.params.id).exec()

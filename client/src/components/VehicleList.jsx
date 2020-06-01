@@ -11,6 +11,9 @@ class VehicleList extends Component {
       <div>
         <ol>
           {vehicles}
+          <li>
+            <button type="button" onClick={this.props.newVehicle}>New Vehicle</button>
+          </li>
         </ol>
       </div>
     );
@@ -19,6 +22,7 @@ class VehicleList extends Component {
 VehicleList.propTypes = {
   allVehicles: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateVehicles: PropTypes.func.isRequired,
+  newVehicle: PropTypes.func.isRequired,
 };
 
 export default VehicleList;

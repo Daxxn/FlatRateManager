@@ -9,34 +9,52 @@ export default class JobsControl extends APIControl {
     this.endpoint = 'jobs';
   }
 
+  // getAllJobs() {
+  //   // let response = {
+  //   //   message: '',
+  //   //   allJobs: [],
+  //   // };
+  //   fetch(this.buildURL(this.APIData.APIJobs), {
+  //     method: this.APIData.methods.get,
+  //     headers: this.APIData.headers,
+  //   })
+  //   .then((res) => {
+  //     res.json()
+  //       .then((data) => {
+  //         return {
+  //           message: 'pass',
+  //           allJobs: data,
+  //         };
+  //       })
+  //       .catch((err) => {
+  //         return {
+  //           message: err,
+  //         };
+  //       })
+  //   })
+  //   .catch((err) => {
+  //     return {
+  //       message: err,
+  //     };
+  //   });
+  // }
+
   getAllJobs() {
-    // let response = {
-    //   message: '',
-    //   allJobs: [],
-    // };
-    fetch(this.buildURL(this.APIData.APIJobs), {
-      method: this.APIData.methods.get,
-      headers: this.APIData.headers,
-    })
-    .then((res) => {
-      res.json()
-        .then((data) => {
-          return {
-            message: 'pass',
-            allJobs: data,
-          };
-        })
-        .catch((err) => {
-          return {
-            message: err,
-          };
-        })
-    })
-    .catch((err) => {
-      return {
-        message: err,
-      };
-    });
+    let response = {};
+     fetch(this.buildURL(this.APIData.APIJobs), {
+        method: this.APIData.methods.get,
+        headers: this.APIData.headers,
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((json) => {
+        response = json;
+      })
+      .catch((err) => {
+        response = err;
+      });
+    return response;
   }
 
   getJob(jobID) {

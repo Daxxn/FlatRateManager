@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import VehicleDisplay from './VehicleDisplay';
+// import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobDisplay';
 import '../styles/MainPage.css';
 import APIControl from '../APIControls/APIControl';
 import VehicleList from './VehicleList';
+import Controlls from './Controlls';
 
 class MainPage extends Component {
   constructor(props) {
@@ -26,6 +27,7 @@ class MainPage extends Component {
 
     this.selectVehicleTest = this.selectVehicleTest.bind(this);
     this.updateVehicle = this.updateVehicle.bind(this);
+    this.createNewVehicle = this.createNewVehicle.bind(this);
   }
 
   componentDidMount() {
@@ -37,55 +39,90 @@ class MainPage extends Component {
   /**
    * Sends GET request for all VEHICLES.
    */
+  // getallVehiclesDB() {
+  //   fetch(this.props.APIData.APIBase + this.props.APIData.APIVehicles, {
+  //     method: this.props.APIData.methods.get,
+  //     headers: this.props.APIData.headers,
+  //   })
+  //   .then((res) => {
+  //     res.json()
+  //       .then((data) => {
+  //         console.log(data);
+  //         this.setState({
+  //           allVehicles: data,
+  //         });
+  //       })
+  //     .catch((err) => {
+  //       this.setState({
+  //         message: err,
+  //       });
+  //     });
+  //   })
+  //   .catch((err) => {
+  //     this.setState({
+  //       message: err,
+  //     });
+  //   })
+  // }
   getallVehiclesDB() {
     fetch(this.props.APIData.APIBase + this.props.APIData.APIVehicles, {
-      method: this.props.APIData.methods.get,
-      headers: this.props.APIData.headers,
-    })
-    .then((res) => {
-      res.json()
-        .then((data) => {
-          console.log(data);
-          this.setState({
+        method: this.props.APIData.methods.get,
+        headers: this.props.APIData.headers,
+      })
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({
             allVehicles: data,
           });
-        })
+      })
       .catch((err) => {
         this.setState({
           message: err,
         });
-      });
-    })
-    .catch((err) => {
-      this.setState({
-        message: err,
-      });
-    })
+      })
   }
 
   /**
    * Sends GET request for all JOBS.
    */
+  // getallJobsDB() {
+  //   fetch(this.URLBuilder.buildURL('/jobs'), this.URLBuilder.buildGetMessage())
+  //   .then((res) => {
+  //     res.json()
+  //       .then((data) => {
+  //         this.setState({
+  //           allJobs: data,
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         this.setState({
+  //           message: err,
+  //         });
+  //       })
+  //   })
+  //   .catch((err) => {
+  //     this.setState({
+  //       message: err,
+  //     });
+  //   });
+  // }
   getallJobsDB() {
     fetch(this.URLBuilder.buildURL('/jobs'), this.URLBuilder.buildGetMessage())
-    .then((res) => {
-      res.json()
-        .then((data) => {
-          this.setState({
-            allJobs: data,
-          });
-        })
-        .catch((err) => {
-          this.setState({
-            message: err,
-          });
-        })
-    })
-    .catch((err) => {
-      this.setState({
-        message: err,
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        this.setState({
+          allJobs: data,
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          message: err,
+        });
       });
-    });
   }
 
   /**
@@ -121,11 +158,27 @@ class MainPage extends Component {
     });
   }
 
-  postVehicle(vehicle) {
-    fetch(this.URLBuilder.buildPlainURL('/vehicles'), this.URLBuilder.buildPostMessage(vehicle))
-    .then((data) => {
+  // postVehicle(vehicle) {
+  //   fetch(this.URLBuilder.buildPlainURL('/vehicles'), this.URLBuilder.buildPostMessage(vehicle))
+  //   .then((data) => {
+  //   })
+  // }
 
-    })
+  patchVehicles(vehicles) {
+    fetch(this.URLBuilder.buildPlainURL('/vehicles/many'), this.URLBuilder.buildPatchMessage(vehicles))
+      .then(res => res.json())
+      .then((data) => {
+        this.setState({
+          message: data.message
+        });
+        console.log(data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          message: err.data
+        });
+      });
   }
   //#endregion
 
@@ -162,6 +215,20 @@ class MainPage extends Component {
       return { allVehicles: prevState.allVehicles };
     });
   }
+
+  createNewVehicle() {
+    const newVehicle = {
+      make: '',
+      model: '',
+      year: 0,
+      jobs: [],
+    };
+    const tempVehicles = this.state.allVehicles;
+    tempVehicles.push(newVehicle);
+    this.setState({
+      allVehicles: tempVehicles,
+    });
+  }
   //#endregion
   
   //#region Helper Methods:
@@ -194,16 +261,24 @@ class MainPage extends Component {
       <div className="maincontainer">
         <div className="datadisplaycontainer"> 
           <p>Data Output</p>
-          <VehicleList allVehicles={this.state.allVehicles} updateVehicles={this.updateVehicle}/>
+          <VehicleList 
+            allVehicles={this.state.allVehicles}
+            updateVehicles={this.updateVehicle}
+            newVehicle={this.createNewVehicle}/>
           <JobDisplay allJobs={this.state.allJobs} />
         </div>
-        <div className="controlscontainer">
+        {/* <div className="controlscontainer">
           <div className="getbuttonsitem">
             <button type="button" onClick={this.onGetVehiclesClick}>GET Vehicles</button>
             <button type="button" onClick={this.onGetJobsClick}>GET Jobs</button>
             <button type="button" onClick={() => {this.getOneVehicle(this.state.selectedVehicleID)}}>GET Selected vehicle</button>
           </div>
-        </div>
+        </div> */}
+        <Controlls
+          onGetVehiclesClick={this.onGetVehiclesClick}
+          onGetJobsClick={this.onGetJobsClick}
+          getOneVehicle={this.getOneVehicle}
+          selectedVehicleID={this.state.selectedVehicleID} />
         <div>
           {this.state.returnedVehicle === (undefined || null) ? <p></p> : <p>{this.state.returnedVehicle.model}</p>}
         </div>

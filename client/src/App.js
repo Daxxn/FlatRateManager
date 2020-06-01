@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import MainPage from './components/MainPage';
+import banner from './banner-main.svg';
 
 function App() {
   const APIData = {
@@ -21,12 +22,10 @@ function App() {
   return (
     <div className="App">
       <header>
-        <p>
-          Flat Rate Job Manager
-        </p>
+        <img src={banner} alt="Flat Rate Manager" />
       </header>
       <div>
-        <MainPage APIData={APIData}/>
+        <MainPage APIData={APIData} />
       </div>
     </div>
   );
