@@ -16,6 +16,14 @@ function findJobById(jobId) {
   });
 }
 
+function findManyJobs(jobIds) {
+  const promises = [];
+  for (const jobId of jobIds) {
+    promises.push(findJobById(jobId));
+  }
+  return new Promise.all(promises);
+}
+
 router.get('/', (req, res) => {
   if (req.body !== undefined) {
     delete req.body;
@@ -93,6 +101,17 @@ router.patch('/:id', (req, res, next) => {
       next(err);
     });
 });
+
+router.patch('/many', (req, res, next) => {
+  if(req.body.ids && req.body.jobs) {
+    findManyJobs(req.body.ids)
+      .then((foundJobs) => {
+        
+      })
+  } else {
+    next(new Error('Either id array or job array is not defined.'));
+  }
+})
 
 router.delete('/:id', (req, res, next) => {
   JobModel.findByIdAndDelete(req.params.id).exec()
