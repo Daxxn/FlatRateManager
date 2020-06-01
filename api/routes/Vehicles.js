@@ -2,6 +2,20 @@ const express = require('express');
 const router = express.Router();
 const VehicleModel = require('../models/VehicleModel');
 
+function findVehicleById(vehicleId) {
+  return new Promise((resolve, reject) => {
+    VehicleModel.findById(vehicleId).exec((err, foundVehicle) => {
+      if(err) {
+        reject(err);
+      } else if (foundVehicle === (undefined || null)) {
+        reject(new Error('no vehicle found'));
+      } else {
+        resolve(foundVehicle);
+      }
+    });
+  });
+}
+
 router.get('/', async (req, res) => {
   try {
     const vehicles = await VehicleModel.find();
@@ -11,37 +25,57 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  const newVehicle = new VehicleModel({
-    make: req.body.make,
-    model: req.body.model,
-    year: req.body.year,
-    jobs: req.body.jobs,
-  });
+router.get('/:id', async (req, res) => {
   try {
-    const savedVehicle = await newVehicle.save();
-    res.json(savedVehicle);
+    const foundVehicle = await findVehicleById(req.params.id);
+    res.json(foundVehicle);
   } catch (err) {
-    res.json({message: err});
+    res.status(500).json(err);
   }
 });
 
-router.patch('/:id', async (req, res) => {
-  try {
+router.post('/', async (req, res) => {
+  if (req.body && req.body.make) {
     const newVehicle = new VehicleModel({
       make: req.body.make,
       model: req.body.model,
       year: req.body.year,
-      jobs: req.body.jobs
+      jobs: req.body.jobs,
     });
-    const response = await VehicleModel.replaceOne(req.params.id, newVehicle);
-    res.json({message: response});
-  } catch(err) {
-    res.json({message: err});
+    try {
+      const resVehicle = await newVehicle.save();
+      res.status(200).json(resVehicle);
+    } catch (err) {
+      res.status(500).json(err);
+    }
   }
-  // VehicleModel.updateOne({_id: req.params.id}, newVehicle, (err) => {
-  //   res.json({message: err});
-  // }).
-})
+});
+
+router.patch('/:id', (req, res, next) => {
+  findVehicleById(req.params.id)
+    .then((vehicle) => {
+      if (req.body) {
+        vehicle = Object.assign(vehicle, req.body);
+        vehicle.save();
+
+        res.status(200).json(vehicle);
+      } else {
+        throw new Error('failed');
+      }
+    })
+    .catch((err) => {
+      next(err);
+    });
+});
+
+router.delete('/:id', (req, res) => {
+  VehicleModel.findByIdAndRemove(req.params.id)
+    .then((delVehicle) => {
+      res.status(200).json(delVehicle);
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    });
+});
 
 module.exports = router;

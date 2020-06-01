@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
-const JobModel = require('./JobModel');
+const ObjectId = mongoose.Schema.Types.ObjectId;
 
 const vehicleSchema = mongoose.Schema({
   make: String,
   model: String,
   year: Number,
-  jobs: [JobModel.schema],
+  jobs: [ObjectId],
 });
 
 module.exports = mongoose.model('VehicleModel', vehicleSchema);
