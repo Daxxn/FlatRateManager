@@ -4,6 +4,7 @@ import MainPage from './components/MainPage.tsx';
 import banner from './banner-main.svg';
 import APIControl from './APIControls/APIControl';
 
+
 function App() {
   const APIData = {
     APIBase: 'http://localhost:9000',
@@ -12,7 +13,6 @@ function App() {
     methods: {
       get: 'GET',
       post: 'POST',
-      put: 'PUT',
       patch: 'PATCH',
       delete: 'DELETE',
     },

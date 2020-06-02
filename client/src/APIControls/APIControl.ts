@@ -1,13 +1,12 @@
 import APIModel from "./DataModels/APIModel";
-import FetchHead from "./DataModels/FetchHead";
 
 export default interface APIControl {
   APIData: APIModel,
 };
 
 export default class APIControl {
-  constructor(APIData: APIModel) {
-    this.APIData = APIData;
+  constructor(APIData: APIModel|object) {
+    this.APIData = APIData as APIModel;
   }
 
   /**
