@@ -69,13 +69,20 @@ router.patch('/:id', (req, res, next) => {
 });
 
 router.delete('/:id', (req, res) => {
-  VehicleModel.findByIdAndRemove(req.params.id)
-    .then((delVehicle) => {
-      res.status(200).json(delVehicle);
-    })
-    .catch((err) => {
-      res.status(500).json(err);
-    });
+  VehicleModel.deleteOne({_id: req.params.id}).exec()
+  .then((delVehicle) => {
+    res.status(200).json(delVehicle);
+  })
+  .catch((err) => {
+    res.status(500).json(err);
+  });
+  // VehicleModel.findByIdAndRemove(req.params.id)
+  //   .then((delVehicle) => {
+  //     res.status(200).json(delVehicle);
+  //   })
+  //   .catch((err) => {
+  //     res.status(500).json(err);
+  //   });
 });
 
 module.exports = router;

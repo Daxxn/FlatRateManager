@@ -8,6 +8,7 @@ export interface Props {
   id: string,
   vehicle: VehicleModel,
   updateVehicle: Function,
+  handleSelection: Function,
 };
 
 export default class VehicleDisplay extends Component<Props, {}> {
@@ -28,19 +29,14 @@ export default class VehicleDisplay extends Component<Props, {}> {
   render() {
     const { _id, make, model, year, /*jobs*/ } = this.props.vehicle;
     return (
-       <li id={_id} key={_id}>
-         <input id="make" type="text" onChange={this.handleChange} value={make} />
-         <input id="model" type="text" onChange={this.handleChange} value={model} />
-         <input id="year" type="number" onChange={this.handleChange} value={year} />
-         <ul>
-            {/* <JobDisplay allJobs={jobs} /> */}
-         </ul>
-       </li>
+      <li id={_id} key={_id} onSelect={() => {this.props.handleSelection(_id)}} >
+        <input id="make" type="text" onChange={this.handleChange} value={make} />
+        <input id="model" type="text" onChange={this.handleChange} value={model} />
+        <input id="year" type="number" onChange={this.handleChange} value={year} />
+        <ul>
+          {/* <JobDisplay allJobs={jobs} /> */}
+        </ul>
+      </li>
     );
   }
 }
-// VehicleDisplay.propTypes = {
-//   vehicle: PropTypes.object.isRequired,
-//   updateVehicle: PropTypes.func.isRequired,
-// };
-// export default VehicleDisplay;

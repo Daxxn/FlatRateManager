@@ -44,6 +44,7 @@ class MainPage extends Component<Props, State> {
     this.selectVehicleTest = this.selectVehicleTest.bind(this);
     this.updateVehicle = this.updateVehicle.bind(this);
     this.createNewVehicle = this.createNewVehicle.bind(this);
+    this.handleSelectedVehicle = this.handleSelectedVehicle.bind(this);
   }
 
   componentDidMount() {
@@ -53,34 +54,9 @@ class MainPage extends Component<Props, State> {
 
   //#region API Fetch Requests
   /**
-   * Sends GET request for all VEHICLES.
+   * Sends GET request to database for all VEHICLES.
    */
-  // getallVehiclesDB() {
-  //   fetch(this.props.APIData.APIBase + this.props.APIData.APIVehicles, {
-  //     method: this.props.APIData.methods.get,
-  //     headers: this.props.APIData.headers,
-  //   })
-  //   .then((res) => {
-  //     res.json()
-  //       .then((data) => {
-  //         console.log(data);
-  //         this.setState({
-  //           allVehicles: data,
-  //         });
-  //       })
-  //     .catch((err) => {
-  //       this.setState({
-  //         message: err,
-  //       });
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     this.setState({
-  //       message: err,
-  //     });
-  //   })
-  // }
-  getallVehiclesDB() {
+  getallVehiclesDB(): void {
     fetch(this.props.URLBuilder.APIData.APIBase + this.props.URLBuilder.APIData.APIVehicles, {
         method: this.props.URLBuilder.APIData.methods.get,
         headers: this.props.URLBuilder.APIData.headers,
@@ -101,29 +77,8 @@ class MainPage extends Component<Props, State> {
   }
 
   /**
-   * Sends GET request for all JOBS.
+   * Sends GET request to database for all JOBS.
    */
-  // getallJobsDB() {
-  //   fetch(this.URLBuilder.buildURL('/jobs'), this.URLBuilder.buildGetMessage())
-  //   .then((res) => {
-  //     res.json()
-  //       .then((data) => {
-  //         this.setState({
-  //           allJobs: data,
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         this.setState({
-  //           message: err,
-  //         });
-  //       })
-  //   })
-  //   .catch((err) => {
-  //     this.setState({
-  //       message: err,
-  //     });
-  //   });
-  // }
   getallJobsDB() {
     fetch(this.props.URLBuilder.buildURL('/jobs', ''), this.props.URLBuilder.buildGetMessage())
       .then((res: Response) => {
@@ -174,12 +129,6 @@ class MainPage extends Component<Props, State> {
     });
   }
 
-  // postVehicle(vehicle) {
-  //   fetch(this.URLBuilder.buildPlainURL('/vehicles'), this.URLBuilder.buildPostMessage(vehicle))
-  //   .then((data) => {
-  //   })
-  // }
-
   patchVehicles(vehicles: VehicleModel[]) {
     fetch(this.props.URLBuilder.buildPlainURL('/vehicles/many'), this.props.URLBuilder.buildPatchMessage(vehicles))
       .then(res => res.json())
@@ -196,6 +145,22 @@ class MainPage extends Component<Props, State> {
         });
       });
   }
+
+  postNewVehicle(vehicle: VehicleModel): void {
+    fetch(this.props.URLBuilder.buildPlainURL('/vehicles/'), this.props.URLBuilder.buildPostMessage(vehicle))
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({
+          message: data.message,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+        this.setState({
+          message: err.data
+        });
+      });
+  }
   //#endregion
 
   onGetVehiclesClick() {
@@ -204,6 +169,13 @@ class MainPage extends Component<Props, State> {
 
   onGetJobsClick() {
     this.getallJobsDB();
+  }
+
+  handleSelectedVehicle(id: string) {
+    const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
+    this.setState({
+      selectedVehicleIndex: index,
+    });
   }
 
   /**
@@ -235,18 +207,14 @@ class MainPage extends Component<Props, State> {
   }
 
   createNewVehicle() {
-    // const newVehicle = {
-    //   make: '',
-    //   model: '',
-    //   year: 0,
-    //   jobs: [],
-    // };
-    const newVehicle = new VehicleModel('', '', '', 0);
+    const newVehicle = new VehicleModel('', 'blank', 'blank', 0);
     const tempVehicles = this.state.allVehicles;
+    // this.testURLBuilder(newVehicle);
     tempVehicles.push(newVehicle);
     this.setState({
       allVehicles: tempVehicles,
     });
+    this.postNewVehicle(newVehicle);
   }
   //#endregion
   
@@ -254,6 +222,9 @@ class MainPage extends Component<Props, State> {
   /**
    * Searches 4 nodes up the DOM tree to find a valid id.
    * Only used during list click events.
+   * Not verry useful and kinda wasteful use
+   * onSelected event instead.
+   *
    * @param {Object} target initial HTML element from event
    */
   findObjectID(target: any): string {
@@ -284,16 +255,10 @@ class MainPage extends Component<Props, State> {
           <VehicleList 
             allVehicles={this.state.allVehicles}
             updateVehicles={this.updateVehicle}
-            newVehicle={this.createNewVehicle}/>
+            newVehicle={this.createNewVehicle}
+            handleSelection={this.handleSelectedVehicle} />
           <JobDisplay allJobs={this.state.allJobs} />
         </div>
-        {/* <div className="controlscontainer">
-          <div className="getbuttonsitem">
-            <button type="button" onClick={this.onGetVehiclesClick}>GET Vehicles</button>
-            <button type="button" onClick={this.onGetJobsClick}>GET Jobs</button>
-            <button type="button" onClick={() => {this.getOneVehicle(this.state.selectedVehicleID)}}>GET Selected vehicle</button>
-          </div>
-        </div> */}
         <Controlls
           onGetVehiclesClick={this.onGetVehiclesClick}
           onGetJobsClick={this.onGetJobsClick}
@@ -306,8 +271,5 @@ class MainPage extends Component<Props, State> {
     );
   }
 }
-// MainPage.propTypes = {
-//   APIData: PropTypes.object.isRequired,
-// };
 
 export default MainPage;
