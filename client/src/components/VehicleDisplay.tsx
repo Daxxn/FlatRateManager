@@ -11,7 +11,7 @@ export interface Props {
 };
 
 export default class VehicleDisplay extends Component<Props, {}> {
-  constructor(props: any) {
+  constructor(props: Props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -26,9 +26,9 @@ export default class VehicleDisplay extends Component<Props, {}> {
   }
 
   render() {
-    const { id, make, model, year, /*jobs*/ } = this.props.vehicle;
+    const { _id, make, model, year, /*jobs*/ } = this.props.vehicle;
     return (
-       <li id={id} key={id}>
+       <li id={_id} key={_id}>
          <input id="make" type="text" onChange={this.handleChange} value={make} />
          <input id="model" type="text" onChange={this.handleChange} value={model} />
          <input id="year" type="number" onChange={this.handleChange} value={year} />

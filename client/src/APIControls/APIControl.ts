@@ -1,5 +1,12 @@
+import APIModel from "./DataModels/APIModel";
+import FetchHead from "./DataModels/FetchHead";
+
+export default interface APIControl {
+  APIData: APIModel,
+};
+
 export default class APIControl {
-  constructor(APIData) {
+  constructor(APIData: APIModel) {
     this.APIData = APIData;
   }
 
@@ -9,7 +16,7 @@ export default class APIControl {
    * @param {string} urlData Optional params for API endpoint call
    * @returns {string} Full API URL
    */
-  buildURL(endpoint, urlData) {
+  public buildURL(endpoint: string, urlData: string): string {
     const idURL = urlData !== undefined ? this.buildIDs(urlData) : '';
     return this.APIData.APIBase + endpoint + idURL;
   }
@@ -19,7 +26,7 @@ export default class APIControl {
    * @param {string} endpoint API Endpoint
    * @returns Full API URL
    */
-  buildPlainURL(endpoint) {
+  buildPlainURL(endpoint: string): string {
     return this.APIData.APIBase + endpoint;
   }
 
@@ -29,7 +36,7 @@ export default class APIControl {
    * @param {string} urlData Data to be passed as params in the URL
    * @returns {string} Params URL
    */
-  buildIDs(urlData) {
+  buildIDs(urlData: string): string {
     return '/' + urlData;
   }
 
@@ -37,7 +44,8 @@ export default class APIControl {
    * Builds the GET data for the fetch request.
    * @returns {Object} ES6 object
    */
-  buildGetMessage() {
+  buildGetMessage(): object {
+    // return new FetchHead(this.APIData.methods.get, this.APIData.headers, {});
     return {
       method: this.APIData.methods.get,
       headers: this.APIData.headers,
@@ -49,7 +57,7 @@ export default class APIControl {
    * @param {Object} body ES6 json-convertable object
    * @returns {Object} Returns fetch request data
    */
-  buildPostMessage(body) {
+  buildPostMessage(body: Object) {
     return {
       method: this.APIData.methods.post,
       headers: this.APIData.headers,
@@ -57,7 +65,7 @@ export default class APIControl {
     };
   }
 
-  buildPatchMessage(body) {
+  buildPatchMessage(body: Object) {
     return {
       method: this.APIData.methods.patch,
       headers: this.APIData.headers,

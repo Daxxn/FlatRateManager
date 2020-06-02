@@ -1,7 +1,8 @@
 import React from 'react';
 import './App.css';
-import MainPage from './components/MainPage';
+import MainPage from './components/MainPage.tsx';
 import banner from './banner-main.svg';
+import APIControl from './APIControls/APIControl';
 
 function App() {
   const APIData = {
@@ -19,13 +20,14 @@ function App() {
       'Content-Type': 'application/json',
     }
   };
+  const apiControl = new APIControl(APIData);
   return (
     <div className="App">
       <header>
         <img src={banner} alt="Flat Rate Manager" />
       </header>
       <div>
-        <MainPage APIData={APIData} />
+        <MainPage URLBuilder={apiControl} />
       </div>
     </div>
   );

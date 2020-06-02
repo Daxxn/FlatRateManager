@@ -8,9 +8,9 @@ export interface JobLinkProps {
 
 class JobLink extends Component<JobLinkProps, {}> {
   render() {
-    const { id, job, time } = this.props.job;
+    const { _id, job, time } = this.props.job;
     return (
-      <li id={id}>
+      <li id={_id}>
         <p>{job}</p>
         <p>{time}</p>
       </li>

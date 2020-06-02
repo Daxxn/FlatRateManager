@@ -1,14 +1,31 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 // import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobDisplay';
 import '../styles/MainPage.css';
-import APIControl from '../APIControls/APIControl';
 import VehicleList from './VehicleList';
 import Controlls from './Controlls';
+import VehicleModel from '../Models/VehicleModel';
+import JobModel from '../Models/JobModel';
+//import APIModel from '../APIControls/DataModels/APIModel';
+import APIControl from '../APIControls/APIControl';
 
-class MainPage extends Component {
-  constructor(props) {
+export interface Props {
+  APIData: object,
+  URLBuilder: APIControl,
+}
+
+export interface State {
+  allVehicles: VehicleModel[],
+  allJobs: JobModel[],
+  message: string,
+  selectedVehicleID: string,
+  selectedVehicleIndex: number,
+  returnedVehicle: VehicleModel,
+}
+
+class MainPage extends Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       message: '',
@@ -17,9 +34,8 @@ class MainPage extends Component {
 
       selectedVehicleID: '',
       selectedVehicleIndex: 0,
-      returnedVehicle: null,
+      returnedVehicle: new VehicleModel('null', '', '', 0),
     };
-    this.URLBuilder = new APIControl(props.APIData);
 
     this.onGetVehiclesClick = this.onGetVehiclesClick.bind(this);
     this.onGetJobsClick = this.onGetJobsClick.bind(this);
@@ -65,9 +81,9 @@ class MainPage extends Component {
   //   })
   // }
   getallVehiclesDB() {
-    fetch(this.props.APIData.APIBase + this.props.APIData.APIVehicles, {
-        method: this.props.APIData.methods.get,
-        headers: this.props.APIData.headers,
+    fetch(this.props.URLBuilder.APIData.APIBase + this.props.URLBuilder.APIData.APIVehicles, {
+        method: this.props.URLBuilder.APIData.methods.get,
+        headers: this.props.URLBuilder.APIData.headers,
       })
       .then((res) => {
         return res.json();
@@ -109,16 +125,16 @@ class MainPage extends Component {
   //   });
   // }
   getallJobsDB() {
-    fetch(this.URLBuilder.buildURL('/jobs'), this.URLBuilder.buildGetMessage())
-      .then((res) => {
+    fetch(this.props.URLBuilder.buildURL('/jobs', ''), this.props.URLBuilder.buildGetMessage())
+      .then((res: Response) => {
         return res.json();
       })
-      .then((data) => {
+      .then((data: any) => {
         this.setState({
           allJobs: data,
         });
       })
-      .catch((err) => {
+      .catch((err: any) => {
         this.setState({
           message: err,
         });
@@ -130,8 +146,8 @@ class MainPage extends Component {
    * be useful.
    * @param {string} id _id element from MongoDB Object.
    */
-  getOneVehicle(id) {
-    fetch(this.URLBuilder.buildURL('/vehicles', id), this.URLBuilder.buildGetMessage())
+  getOneVehicle(id: string) {
+    fetch(this.props.URLBuilder.buildURL('/vehicles', id), this.props.URLBuilder.buildGetMessage())
     .then((res) => {
       res.json()
       .then((data) => {
@@ -164,8 +180,8 @@ class MainPage extends Component {
   //   })
   // }
 
-  patchVehicles(vehicles) {
-    fetch(this.URLBuilder.buildPlainURL('/vehicles/many'), this.URLBuilder.buildPatchMessage(vehicles))
+  patchVehicles(vehicles: VehicleModel[]) {
+    fetch(this.props.URLBuilder.buildPlainURL('/vehicles/many'), this.props.URLBuilder.buildPatchMessage(vehicles))
       .then(res => res.json())
       .then((data) => {
         this.setState({
@@ -194,7 +210,7 @@ class MainPage extends Component {
    * Vehicle element selected event test.
    * @param {Event} e event args
    */
-  selectVehicleTest(e) {
+  selectVehicleTest(e: any) {
     const id = this.findObjectID(e.target);
     const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
     //console.log(id);
@@ -205,24 +221,27 @@ class MainPage extends Component {
   }
 
   //#region Vehicle Controls
-  updateVehicle(id, key, data) {
+  updateVehicle(id: string, key: string, data: VehicleModel) {
     const newVehicle = this.findObject(id, this.state.allVehicles);
     const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
+    // @ts-ignore: Key can be accessed with string. TS doesnt like it.
     newVehicle[key] = data;
+    // @ts-ignore: Key can be accessed with string. TS doesnt like it.
     console.log(newVehicle[key]);
     this.setState(prevState => {
-      prevState.allVehicles[index] = newVehicle;
+      prevState.allVehicles[index] = newVehicle as VehicleModel;
       return { allVehicles: prevState.allVehicles };
     });
   }
 
   createNewVehicle() {
-    const newVehicle = {
-      make: '',
-      model: '',
-      year: 0,
-      jobs: [],
-    };
+    // const newVehicle = {
+    //   make: '',
+    //   model: '',
+    //   year: 0,
+    //   jobs: [],
+    // };
+    const newVehicle = new VehicleModel('', '', '', 0);
     const tempVehicles = this.state.allVehicles;
     tempVehicles.push(newVehicle);
     this.setState({
@@ -237,22 +256,23 @@ class MainPage extends Component {
    * Only used during list click events.
    * @param {Object} target initial HTML element from event
    */
-  findObjectID(target) {
+  findObjectID(target: any): string {
     let parent = target;
     for(let i = 0; i < 5; i++) {
       if (parent.id !== '') {
         return parent.id;
       } else {
-        parent = parent.parentNode;
+        parent = parent.parentElement;
       }
     }
     this.setState({
-      message: new Error('Could not find an id.'),
+      message: 'Could not find an id.',
     });
+    return '';
   }
 
-  findObject(id, array) {
-    return array.find(veh => veh._id === id);
+  findObject(id: string, array: Array<VehicleModel|JobModel>): VehicleModel|JobModel {
+    return array.find(veh => veh._id === id) as VehicleModel|JobModel;
   }
   //#endregion
 
@@ -286,8 +306,8 @@ class MainPage extends Component {
     );
   }
 }
-MainPage.propTypes = {
-  APIData: PropTypes.object.isRequired,
-};
+// MainPage.propTypes = {
+//   APIData: PropTypes.object.isRequired,
+// };
 
 export default MainPage;

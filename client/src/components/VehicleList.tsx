@@ -1,8 +1,15 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import VehicleDisplay from './VehicleDisplay';
+import VehicleModel from '../Models/VehicleModel';
 
-class VehicleList extends Component {
+export interface Props {
+  allVehicles: VehicleModel[],
+  updateVehicles: any,
+  newVehicle: any,
+}
+
+class VehicleList extends Component<Props, {}> {
   render() {
     const vehicles = this.props.allVehicles !== undefined || null ? this.props.allVehicles.map((vehicle) => {
       return <VehicleDisplay vehicle={vehicle} id={vehicle._id} updateVehicle={this.props.updateVehicles}/>
@@ -19,10 +26,10 @@ class VehicleList extends Component {
     );
   }
 }
-VehicleList.propTypes = {
-  allVehicles: PropTypes.arrayOf(PropTypes.object).isRequired,
-  updateVehicles: PropTypes.func.isRequired,
-  newVehicle: PropTypes.func.isRequired,
-};
+// VehicleList.propTypes = {
+//   allVehicles: PropTypes.arrayOf(PropTypes.object).isRequired,
+//   updateVehicles: PropTypes.func.isRequired,
+//   newVehicle: PropTypes.func.isRequired,
+// };
 
 export default VehicleList;
