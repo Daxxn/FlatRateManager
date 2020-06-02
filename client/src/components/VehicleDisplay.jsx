@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import '../styles/VehicleDisplay.css';
-import JobDisplay from './JobDisplay';
+// import JobDisplay from './JobDisplay';
 
 class VehicleDisplay extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ class VehicleDisplay extends Component {
   }
 
   render() {
-    const { _id, make, model, year, jobs } = this.props.vehicle;
+    const { _id, make, model, year, /*jobs*/ } = this.props.vehicle;
     return (
        <li id={_id} key={_id}>
          <input id="make" type="text" onChange={this.handleChange} value={make} />
