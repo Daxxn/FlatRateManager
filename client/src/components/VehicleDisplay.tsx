@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+// import PropTypes from 'prop-types';
 import '../styles/VehicleDisplay.css';
+import VehicleModel from '../Models/VehicleModel';
 // import JobDisplay from './JobDisplay';
 
-class VehicleDisplay extends Component {
-  constructor(props) {
+export interface Props {
+  id: string,
+  vehicle: VehicleModel,
+  updateVehicle: Function,
+};
+
+export default class VehicleDisplay extends Component<Props, {}> {
+  constructor(props: any) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
   }
@@ -12,16 +19,16 @@ class VehicleDisplay extends Component {
    * 
    * @param {Event} e event agrs
    */
-  handleChange(e) {
+  handleChange(e: any) {
     const {id, value} = e.target;
     console.log(value);
     this.props.updateVehicle(this.props.id, id, value);
   }
 
   render() {
-    const { _id, make, model, year, /*jobs*/ } = this.props.vehicle;
+    const { id, make, model, year, /*jobs*/ } = this.props.vehicle;
     return (
-       <li id={_id} key={_id}>
+       <li id={id} key={id}>
          <input id="make" type="text" onChange={this.handleChange} value={make} />
          <input id="model" type="text" onChange={this.handleChange} value={model} />
          <input id="year" type="number" onChange={this.handleChange} value={year} />
@@ -32,8 +39,8 @@ class VehicleDisplay extends Component {
     );
   }
 }
-VehicleDisplay.propTypes = {
-  vehicle: PropTypes.object.isRequired,
-  updateVehicle: PropTypes.func.isRequired,
-};
-export default VehicleDisplay;
+// VehicleDisplay.propTypes = {
+//   vehicle: PropTypes.object.isRequired,
+//   updateVehicle: PropTypes.func.isRequired,
+// };
+// export default VehicleDisplay;
