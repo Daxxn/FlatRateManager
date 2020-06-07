@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
-import JobModel from '../Models/JobModel';
+import JobModel from '../../Models/JobModel';
 
 export interface JobLinkProps {
   job: JobModel,

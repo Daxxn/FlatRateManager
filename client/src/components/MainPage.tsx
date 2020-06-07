@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 //import PropTypes from 'prop-types';
 // import VehicleDisplay from './VehicleDisplay';
-import JobDisplay from './JobDisplay';
+import JobDisplay from './JobComponents/JobDisplay';
 import '../styles/MainPage.css';
-import VehicleList from './VehicleList';
+import VehicleList from './VehicleComponents/VehicleList';
 import Controlls from './Controlls';
 import VehicleModel from '../Models/VehicleModel';
 import JobModel from '../Models/JobModel';
@@ -257,7 +257,7 @@ class MainPage extends Component<Props, State> {
             updateVehicles={this.updateVehicle}
             newVehicle={this.createNewVehicle}
             handleSelection={this.handleSelectedVehicle} />
-          <JobDisplay allJobs={this.state.allJobs} />
+          {/* <JobDisplay allJobs={this.state.allJobs} /> */}
         </div>
         <Controlls
           onGetVehiclesClick={this.onGetVehiclesClick}
