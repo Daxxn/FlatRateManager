@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 // import PropTypes from 'prop-types';
 import '../styles/VehicleDisplay.css';
 import VehicleModel from '../Models/VehicleModel';
-// import JobDisplay from './JobDisplay';
+import JobDisplay from './JobDisplay';
 
 export interface Props {
   id: string,
@@ -27,14 +27,14 @@ export default class VehicleDisplay extends Component<Props, {}> {
   }
 
   render() {
-    const { _id, make, model, year, /*jobs*/ } = this.props.vehicle;
+    const { _id, make, model, year, jobs } = this.props.vehicle;
     return (
       <li id={_id} key={_id} onSelect={() => {this.props.handleSelection(_id)}} >
         <input id="make" type="text" onChange={this.handleChange} value={make} />
         <input id="model" type="text" onChange={this.handleChange} value={model} />
         <input id="year" type="number" onChange={this.handleChange} value={year} />
         <ul>
-          {/* <JobDisplay allJobs={jobs} /> */}
+          <JobDisplay allJobs={jobs} />
         </ul>
       </li>
     );

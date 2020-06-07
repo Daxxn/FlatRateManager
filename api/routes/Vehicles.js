@@ -1,10 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const VehicleModel = require('../models/VehicleModel');
+const JobModel = require('../models/JobModel');
 
 function findVehicleById(vehicleId) {
   return new Promise((resolve, reject) => {
-    VehicleModel.findById(vehicleId).exec((err, foundVehicle) => {
+    VehicleModel
+      .findOne({_id: vehicleId})
+      // .populate('jobs')
+      .exec((err, foundVehicle) => {
       if(err) {
         reject(err);
       } else if (foundVehicle === (undefined || null)) {
@@ -16,19 +20,29 @@ function findVehicleById(vehicleId) {
   });
 }
 
+async function getAllJobs(vehicle) {
+  return await vehicle.populate('jobs').execPopulate();
+}
+
 router.get('/', async (req, res) => {
   try {
     const vehicles = await VehicleModel.find();
+    console.log(vehicles);
     res.json(vehicles);
   } catch (err) {
     res.json({message: err});
   }
 });
 
-router.get('/:id', async (req, res) => {
+router.get('/:id', (req, res) => {
   try {
-    const foundVehicle = await findVehicleById(req.params.id);
-    res.json(foundVehicle);
+    findVehicleById(req.params.id)
+      .then(foundVehicle => {
+        res.status(200).json(foundVehicle);
+      })
+      .catch(err => {
+        throw err;
+      });
   } catch (err) {
     res.status(500).json(err);
   }

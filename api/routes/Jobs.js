@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const JobModel = require('../models/JobModel');
+const VehicleModel = require('../models/VehicleModel');
 
 function findJobById(jobId) {
   return new Promise((resolve, reject) => {
@@ -14,6 +15,34 @@ function findJobById(jobId) {
       }
     });
   });
+}
+
+function findVehicleById(vehicleId) {
+  return new Promise((resolve, reject) => {
+    VehicleModel
+      .findById(vehicleId)
+      .exec((err, foundVehicle) => {
+        if (err) {
+          reject(err);
+        } else if (foundVehicle === (undefined || null)) {
+          reject(new Error('No vehicle found.'));
+        } else {
+          resolve(foundVehicle);
+        }
+      })
+  })
+}
+
+const buildJob = (body) => {
+  if (body.job && body.time) {
+    if (body._id) {
+      delete body._id;
+    }
+    const newJob = new JobModel(body);
+    return newJob.save();
+  } else {
+    throw new Error('job and time must be defined.');
+  }
 }
 
 function findManyJobs(jobIds) {
@@ -63,8 +92,8 @@ router.get('/:id', (req, res) => {
     });
 });
 
-router.post('/:jobId', (req, res, next) => {
-  findJobById(req.params.jobId)
+router.post('/:vehicleId', (req, res, next) => {
+  findJobById(req.params.vehicleId)
     .then((job) => {
       if (req.body) {
         if (!req.body._id) {
@@ -83,6 +112,22 @@ router.post('/:jobId', (req, res, next) => {
       next(err);
     });
 });
+
+router.post('/:vehicleId/test', async (req, res, next) => {
+  const newJob = await buildJob(req.body);
+  findVehicleById(req.params.vehicleId)
+    .then((vehicle) => {
+      vehicle.jobs.push(newJob._id);
+      console.log(vehicle);
+      return vehicle.save();
+    })
+    .then((savedVehicle) => {
+      res.status(200).json(savedVehicle);
+    })
+    .catch((err) => {
+      next(err);
+    })
+})
 
 router.post('/', (req, res, next) => {
   if (req.body) {

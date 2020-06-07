@@ -34,7 +34,7 @@ class MainPage extends Component<Props, State> {
 
       selectedVehicleID: '',
       selectedVehicleIndex: 0,
-      returnedVehicle: new VehicleModel('null', '', '', 0),
+      returnedVehicle: new VehicleModel('null', '', '', 0, []),
     };
 
     this.onGetVehiclesClick = this.onGetVehiclesClick.bind(this);
@@ -207,7 +207,7 @@ class MainPage extends Component<Props, State> {
   }
 
   createNewVehicle() {
-    const newVehicle = new VehicleModel('', 'blank', 'blank', 0);
+    const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
     const tempVehicles = this.state.allVehicles;
     // this.testURLBuilder(newVehicle);
     tempVehicles.push(newVehicle);
