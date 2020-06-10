@@ -1,13 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent, ChangeEvent } from 'react';
 // import PropTypes from 'prop-types';
 import '../../styles/VehicleDisplay.css';
 import VehicleModel from '../../Models/VehicleModel';
 import JobList from '../JobComponents/JobList';
+import AddJobControl from '../AddJobControl';
 
 export interface Props {
   vehicle: VehicleModel,
   updateVehicle: Function,
-  updateJob: Function,
+  updateJob: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel) => void,
+  newJob: (vehicle: VehicleModel) => void;
   handleSelection: Function,
 };
 
@@ -15,20 +17,22 @@ export default class VehicleDisplay extends Component<Props, {}> {
   constructor(props: Props) {
     super(props);
     this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.handleNewJob = this.handleNewJob.bind(this);
   }
   /**
    * 
-   * @param {Event} e event agrs
+   * @param {ChangeEvent<HTMLInputElement>} e event agrs
    */
-  handleVehicleChange(e: any) {
-    const {id, value} = e.target;
-    //console.log(value);
-    this.props.updateVehicle(this.props.vehicle._id, id, value);
+  handleVehicleChange(e: ChangeEvent<HTMLInputElement>) {
+    this.props.updateVehicle(e, this.props.vehicle._id);
   }
 
-  handleJobChange(e: any) {
-    const {id, value} = e.target;
-    this.props.updateJob(this.props.vehicle._id, id, value)
+  handleJobChange(e: ChangeEvent<HTMLInputElement>) {
+    this.props.updateJob(e, this.props.vehicle);
+  }
+
+  handleNewJob(e: MouseEvent) {
+    this.props.newJob(this.props.vehicle);
   }
 
   render() {
@@ -39,7 +43,8 @@ export default class VehicleDisplay extends Component<Props, {}> {
         <input id="model" type="text" onChange={this.handleVehicleChange} value={model} />
         <input id="year" type="number" onChange={this.handleVehicleChange} value={year} />
         <ul>
-          <JobList allJobs={jobs} updateJob={this.handleJobChange} />
+          <JobList allJobs={jobs} updateJob={this.handleJobChange} newJob={this.handleNewJob}/>
+          <AddJobControl />
         </ul>
       </li>
     );

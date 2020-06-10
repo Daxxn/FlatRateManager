@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent, ChangeEvent } from 'react';
 //import PropTypes from 'prop-types';
 // import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobComponents/JobDisplay';
@@ -43,7 +43,9 @@ class MainPage extends Component<Props, State> {
 
     this.selectVehicleTest = this.selectVehicleTest.bind(this);
     this.updateVehicle = this.updateVehicle.bind(this);
+    this.updateJob = this.updateJob.bind(this);
     this.createNewVehicle = this.createNewVehicle.bind(this);
+    this.createNewJob = this.createNewJob.bind(this);
     this.handleSelectedVehicle = this.handleSelectedVehicle.bind(this);
   }
 
@@ -193,16 +195,39 @@ class MainPage extends Component<Props, State> {
   }
 
   //#region Vehicle Controls
-  updateVehicle(id: string, key: string, data: VehicleModel) {
-    const newVehicle = this.findObject(id, this.state.allVehicles);
-    const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
+  updateVehicle(e: ChangeEvent<HTMLInputElement>, vehicleId: string) {
+    console.log(vehicleId);
+    const newVehicle = this.findObject(vehicleId, this.state.allVehicles);
+    const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === vehicleId);
     // @ts-ignore: Key can be accessed with string. TS doesnt like it.
-    newVehicle[key] = data;
+    newVehicle[e.target.id] = e.target.value;
     // @ts-ignore: Key can be accessed with string. TS doesnt like it.
-    console.log(newVehicle[key]);
+    console.log(newVehicle[e.target.id]);
     this.setState(prevState => {
       prevState.allVehicles[index] = newVehicle as VehicleModel;
       return { allVehicles: prevState.allVehicles };
+    });
+  }
+
+  /**
+   * TEST LATER!!!
+   * @param e Input Event Args
+   * @param vehicle Vehicle from input event
+   * @param job Job from input event
+   */
+  updateJob(e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel, job: JobModel) {
+    const tempVehicles = this.state.allVehicles;
+    const foundVehicle = this.findObject(vehicle._id, this.state.allVehicles) as VehicleModel;
+    const vehicleIndex = this.state.allVehicles.findIndex(vehicle => vehicle._id);
+
+    const foundJob = this.findObject(job._id, foundVehicle.jobs) as JobModel;
+    const jobIndex = foundVehicle.jobs.findIndex(job => job._id);
+
+    foundVehicle.jobs[jobIndex] = foundJob;
+    tempVehicles[vehicleIndex] = foundVehicle;
+
+    this.setState({
+      allVehicles: tempVehicles,
     });
   }
 
@@ -215,6 +240,16 @@ class MainPage extends Component<Props, State> {
       allVehicles: tempVehicles,
     });
     this.postNewVehicle(newVehicle);
+  }
+
+  createNewJob(vehicle: VehicleModel) {
+    const index = this.state.allVehicles.findIndex(v => vehicle);
+    const job = new JobModel(' ', 'new Job', 0);
+    const tempVehicles = this.state.allVehicles;
+    tempVehicles[index].jobs.push(job);
+    this.setState({
+      allVehicles: tempVehicles,
+    });
   }
   //#endregion
   
@@ -255,8 +290,10 @@ class MainPage extends Component<Props, State> {
           <VehicleList 
             allVehicles={this.state.allVehicles}
             updateVehicles={this.updateVehicle}
+            updateJobs={this.updateJob}
             newVehicle={this.createNewVehicle}
-            handleSelection={this.handleSelectedVehicle} />
+            handleSelection={this.handleSelectedVehicle}
+            newJob={this.createNewJob}/>
           {/* <JobDisplay allJobs={this.state.allJobs} /> */}
         </div>
         <Controlls

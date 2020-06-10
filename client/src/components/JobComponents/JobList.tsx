@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, MouseEvent } from 'react';
 import JobModel from '../../Models/JobModel';
 import JobDisplay from './JobDisplay';
 
 export interface Props {
   allJobs: JobModel[],
   updateJob: Function,
-  // newJob: Function,
+  newJob: (e: MouseEvent) => void,
   //handleSelection: Function,
 };
 
@@ -17,7 +17,7 @@ export default class JobList extends Component<Props, {}> {
     return (
       <ol>
         {jobs}
-        {/* <button type="button" onClick={() => {this.props.newJob()}} /> */}
+        <button type="button" onClick={this.props.newJob}>New Job</button>
       </ol>
     )
   }
