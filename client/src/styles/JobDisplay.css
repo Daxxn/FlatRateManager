@@ -1,9 +1,17 @@
 .joblist {
   text-align: left;
-  border: solid 1px #4187b6;
+  border: solid 1px #4491c4;
   margin: 5px;
   padding: -2px;
   transition: margin 0.2s, background-color 0.2s;
+}
+
+.jobSelect {
+  text-align: left;
+  border: solid 1px #4491c4;
+  margin: 5px;
+  padding: -2px;
+  background-color: #336b91;
 }
 
 .jobframe {

@@ -7,6 +7,6 @@
   background-color: azure;
 }
 
-.item.selected {
+.itemSelected {
   background-color: aqua;
 }

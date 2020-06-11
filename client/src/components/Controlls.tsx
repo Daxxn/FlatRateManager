@@ -5,7 +5,6 @@ export interface ControllsProps {
   onGetVehiclesClick: any,
   onGetJobsClick: any,
   getOneVehicle: any,
-  selectedVehicleID: string,
 };
 
 const Controlls: React.FC<ControllsProps> = (props: ControllsProps) => {
@@ -22,11 +21,6 @@ const Controlls: React.FC<ControllsProps> = (props: ControllsProps) => {
               onClick={props.onGetJobsClick}>
                 GET Jobs
             </button>
-            <button
-              type="button"
-              onClick={() => {props.getOneVehicle(props.selectedVehicleID)}}>
-                GET Selected vehicle
-            </button>
       </div>
     </div>
   );
@@ -35,7 +29,6 @@ Controlls.propTypes = {
   onGetVehiclesClick: PropTypes.func.isRequired,
   onGetJobsClick: PropTypes.func.isRequired,
   getOneVehicle: PropTypes.func.isRequired,
-  selectedVehicleID: PropTypes.string.isRequired,
 };
 
 export default Controlls;

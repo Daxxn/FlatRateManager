@@ -2,33 +2,53 @@ import React, { Component, ChangeEvent } from 'react';
 // import PropTypes from 'prop-types';
 import VehicleDisplay from './VehicleDisplay';
 import VehicleModel from '../../Models/VehicleModel';
+import JobModel from '../../Models/JobModel';
 
 export interface Props {
   allVehicles: VehicleModel[],
+  selectVehicleIndex: number;
+  selectJobIndex: number;
   updateVehicles: (e: ChangeEvent<HTMLInputElement>, vehicleId: string) => void;
-  updateJobs: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel) => void;
+  updateJobs: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel, job: JobModel) => void;
   newVehicle: () => void,
   newJob: (Vehicle: VehicleModel) => void;
-  handleSelection: (id: string) => void;
+  handleVehicleSelect: (vehI: number) => void;
+  handleJobSelect: (jobI: number) => void;
 }
 
 class VehicleList extends Component<Props, {}> {
-
   render() {
-    const vehicles = this.props.allVehicles !== undefined || null ? this.props.allVehicles.map((vehicle) => {
+    const {
+      allVehicles,
+      selectJobIndex,
+      selectVehicleIndex,
+      updateVehicles,
+      updateJobs,
+      handleVehicleSelect,
+      handleJobSelect,
+      newJob,
+      newVehicle
+    } = this.props;
+
+    const vehicles = allVehicles !== undefined || null ? allVehicles.map((vehicle, ind) => {
       return <VehicleDisplay
+        selJobIndex={selectJobIndex}
+        index={ind}
         vehicle={vehicle}
-        updateVehicle={this.props.updateVehicles}
-        updateJob={this.props.updateJobs}
-        handleSelection={this.props.handleSelection}
-        newJob={this.props.newJob}/>
+        updateVehicle={updateVehicles}
+        updateJob={updateJobs}
+        newJob={newJob}
+        handleVehicleSelect={handleVehicleSelect}
+        handleJobSelect={handleJobSelect}
+        style={selectVehicleIndex === ind ? 'itemSelected' : 'item'}
+      />
     }) : <p>No vehicles</p>
     return (
       <div>
         <ol>
           {vehicles}
           <li>
-            <button type="button" onClick={this.props.newVehicle}>New Vehicle</button>
+            <button type="button" onClick={newVehicle}>New Vehicle</button>
           </li>
         </ol>
       </div>

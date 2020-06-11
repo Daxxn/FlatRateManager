@@ -11,17 +11,16 @@ import JobModel from '../Models/JobModel';
 import APIControl from '../APIControls/APIControl';
 
 export interface Props {
-  APIData: object,
-  URLBuilder: APIControl,
+  APIData: object;
+  URLBuilder: APIControl;
 }
 
 export interface State {
-  allVehicles: VehicleModel[],
-  allJobs: JobModel[],
-  message: string,
-  selectedVehicleID: string,
-  selectedVehicleIndex: number,
-  returnedVehicle: VehicleModel,
+  allVehicles: VehicleModel[];
+  allJobs: JobModel[];
+  message: string;
+  selectedVehicleIndex: number;
+  selectedJobIndex: number;
 }
 
 class MainPage extends Component<Props, State> {
@@ -32,9 +31,8 @@ class MainPage extends Component<Props, State> {
       allVehicles: [],
       allJobs: [],
 
-      selectedVehicleID: '',
       selectedVehicleIndex: 0,
-      returnedVehicle: new VehicleModel('null', '', '', 0, []),
+      selectedJobIndex: 0,
     };
 
     this.onGetVehiclesClick = this.onGetVehiclesClick.bind(this);
@@ -47,6 +45,7 @@ class MainPage extends Component<Props, State> {
     this.createNewVehicle = this.createNewVehicle.bind(this);
     this.createNewJob = this.createNewJob.bind(this);
     this.handleSelectedVehicle = this.handleSelectedVehicle.bind(this);
+    this.handleSelectedJob = this.handleSelectedJob.bind(this);
   }
 
   componentDidMount() {
@@ -173,10 +172,17 @@ class MainPage extends Component<Props, State> {
     this.getallJobsDB();
   }
 
-  handleSelectedVehicle(id: string) {
-    const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
+  handleSelectedVehicle(vehI: number): void {
+    console.log('vehicle');
     this.setState({
-      selectedVehicleIndex: index,
+      selectedVehicleIndex: vehI,
+    });
+  }
+
+  handleSelectedJob(jobI: number): void {
+    console.log('job');
+    this.setState({
+      selectedJobIndex: jobI,
     });
   }
 
@@ -187,22 +193,18 @@ class MainPage extends Component<Props, State> {
   selectVehicleTest(e: any) {
     const id = this.findObjectID(e.target);
     const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === id);
-    //console.log(id);
     this.setState({
-      selectedVehicleID: id,
       selectedVehicleIndex: index,
     });
   }
 
   //#region Vehicle Controls
   updateVehicle(e: ChangeEvent<HTMLInputElement>, vehicleId: string) {
-    console.log(vehicleId);
     const newVehicle = this.findObject(vehicleId, this.state.allVehicles);
     const index = this.state.allVehicles.findIndex(vehicle => vehicle._id === vehicleId);
     // @ts-ignore: Key can be accessed with string. TS doesnt like it.
     newVehicle[e.target.id] = e.target.value;
     // @ts-ignore: Key can be accessed with string. TS doesnt like it.
-    console.log(newVehicle[e.target.id]);
     this.setState(prevState => {
       prevState.allVehicles[index] = newVehicle as VehicleModel;
       return { allVehicles: prevState.allVehicles };
@@ -210,7 +212,7 @@ class MainPage extends Component<Props, State> {
   }
 
   /**
-   * TEST LATER!!!
+   * Updates job data in a specific vehicle.
    * @param e Input Event Args
    * @param vehicle Vehicle from input event
    * @param job Job from input event
@@ -218,10 +220,14 @@ class MainPage extends Component<Props, State> {
   updateJob(e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel, job: JobModel) {
     const tempVehicles = this.state.allVehicles;
     const foundVehicle = this.findObject(vehicle._id, this.state.allVehicles) as VehicleModel;
-    const vehicleIndex = this.state.allVehicles.findIndex(vehicle => vehicle._id);
+    const vehicleIndex = this.state.allVehicles.findIndex(v => v._id === vehicle._id);
 
     const foundJob = this.findObject(job._id, foundVehicle.jobs) as JobModel;
-    const jobIndex = foundVehicle.jobs.findIndex(job => job._id);
+    const jobIndex = foundVehicle.jobs.findIndex(j => j._id === job._id);
+
+    // @ts-ignore: Key can be accessed with string. TS doesnt like it.
+    foundJob[e.target.id] = e.target.value;
+    // @ts-ignore: Key can be accessed with string. TS doesnt like it.
 
     foundVehicle.jobs[jobIndex] = foundJob;
     tempVehicles[vehicleIndex] = foundVehicle;
@@ -234,7 +240,6 @@ class MainPage extends Component<Props, State> {
   createNewVehicle() {
     const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
     const tempVehicles = this.state.allVehicles;
-    // this.testURLBuilder(newVehicle);
     tempVehicles.push(newVehicle);
     this.setState({
       allVehicles: tempVehicles,
@@ -243,7 +248,7 @@ class MainPage extends Component<Props, State> {
   }
 
   createNewJob(vehicle: VehicleModel) {
-    const index = this.state.allVehicles.findIndex(v => vehicle);
+    const index = this.state.allVehicles.findIndex(v => v._id === vehicle._id);
     const job = new JobModel(' ', 'new Job', 0);
     const tempVehicles = this.state.allVehicles;
     tempVehicles[index].jobs.push(job);
@@ -283,27 +288,28 @@ class MainPage extends Component<Props, State> {
   //#endregion
 
   render() {
+    const {allVehicles, selectedVehicleIndex, selectedJobIndex} = this.state;
     return (
       <div className="maincontainer">
         <div className="datadisplaycontainer"> 
           <p>Data Output</p>
-          <VehicleList 
-            allVehicles={this.state.allVehicles}
+          <VehicleList
+            selectVehicleIndex={selectedVehicleIndex}
+            selectJobIndex={selectedJobIndex}
+            allVehicles={allVehicles}
             updateVehicles={this.updateVehicle}
             updateJobs={this.updateJob}
             newVehicle={this.createNewVehicle}
-            handleSelection={this.handleSelectedVehicle}
-            newJob={this.createNewJob}/>
-          {/* <JobDisplay allJobs={this.state.allJobs} /> */}
+            newJob={this.createNewJob}
+            handleVehicleSelect={this.handleSelectedVehicle}
+            handleJobSelect={this.handleSelectedJob}
+          />
         </div>
         <Controlls
           onGetVehiclesClick={this.onGetVehiclesClick}
           onGetJobsClick={this.onGetJobsClick}
           getOneVehicle={this.getOneVehicle}
-          selectedVehicleID={this.state.selectedVehicleID} />
-        <div>
-          {this.state.returnedVehicle === (undefined || null) ? <p></p> : <p>{this.state.returnedVehicle.model}</p>}
-        </div>
+        />
       </div>
     );
   }

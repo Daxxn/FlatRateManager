@@ -4,19 +4,25 @@ import '../../styles/VehicleDisplay.css';
 import VehicleModel from '../../Models/VehicleModel';
 import JobList from '../JobComponents/JobList';
 import AddJobControl from '../AddJobControl';
+import JobModel from '../../Models/JobModel';
 
 export interface Props {
-  vehicle: VehicleModel,
-  updateVehicle: Function,
-  updateJob: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel) => void,
+  index: number;
+  selJobIndex: number;
+  vehicle: VehicleModel;
+  updateVehicle: Function;
+  updateJob: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel, job: JobModel) => void;
   newJob: (vehicle: VehicleModel) => void;
-  handleSelection: Function,
+  handleVehicleSelect: (vehI: number) => void;
+  handleJobSelect: (jobI: number) => void;
+  style: string;
 };
 
 export default class VehicleDisplay extends Component<Props, {}> {
   constructor(props: Props) {
     super(props);
     this.handleVehicleChange = this.handleVehicleChange.bind(this);
+    this.handleJobChange = this.handleJobChange.bind(this);
     this.handleNewJob = this.handleNewJob.bind(this);
   }
   /**
@@ -27,8 +33,8 @@ export default class VehicleDisplay extends Component<Props, {}> {
     this.props.updateVehicle(e, this.props.vehicle._id);
   }
 
-  handleJobChange(e: ChangeEvent<HTMLInputElement>) {
-    this.props.updateJob(e, this.props.vehicle);
+  handleJobChange(e: ChangeEvent<HTMLInputElement>, job: JobModel): void {
+    this.props.updateJob(e, this.props.vehicle, job);
   }
 
   handleNewJob(e: MouseEvent) {
@@ -36,14 +42,30 @@ export default class VehicleDisplay extends Component<Props, {}> {
   }
 
   render() {
-    const { _id, make, model, year, jobs } = this.props.vehicle;
+    const {
+      index,
+      vehicle,
+      selJobIndex,
+      style,
+      handleVehicleSelect,
+      handleJobSelect,
+    } = this.props;
+    const { _id, make, model, year, jobs } = vehicle;
+
     return (
-      <li id={_id} key={_id} onSelect={() => {this.props.handleSelection(_id)}} >
+      <li className={style} id={_id} key={_id} onSelect={() => {handleVehicleSelect(index)}} >
         <input id="make" type="text" onChange={this.handleVehicleChange} value={make} />
         <input id="model" type="text" onChange={this.handleVehicleChange} value={model} />
         <input id="year" type="number" onChange={this.handleVehicleChange} value={year} />
         <ul>
-          <JobList allJobs={jobs} updateJob={this.handleJobChange} newJob={this.handleNewJob}/>
+          <JobList
+            selectIndex={selJobIndex}
+            vehicleIndex={index}
+            allJobs={jobs}
+            updateJob={this.handleJobChange}
+            newJob={this.handleNewJob}
+            handleSelection={handleJobSelect}
+          />
           <AddJobControl />
         </ul>
       </li>
