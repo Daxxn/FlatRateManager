@@ -1,0 +1,15 @@
+GET http://localhost:9000/users
+
+###
+
+GET http://localhost:9000/users/id/5eeef2a42eaf93267067ae47
+
+###
+
+POST http://localhost:9000/users
+Content-Type: application/json
+
+{
+  "userName": "cody",
+  "password": "test"
+}
