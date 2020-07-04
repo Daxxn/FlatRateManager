@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const VehicleModel = require('../models/VehicleModel');
 const JobModel = require('../models/JobModel');
+const checkAuthentication = require('../checkAuth');
 
 function findVehicleById(vehicleId) {
   return new Promise((resolve, reject) => {
@@ -23,6 +24,8 @@ function findVehicleById(vehicleId) {
 async function getAllJobs(vehicle) {
   return await vehicle.populate('jobs').execPopulate();
 }
+
+router.use(checkAuthentication);
 
 router.get('/', async (req, res) => {
   try {

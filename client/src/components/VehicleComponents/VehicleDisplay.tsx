@@ -4,11 +4,13 @@ import '../../styles/VehicleDisplay.css';
 import VehicleModel from '../../Models/VehicleModel';
 import JobList from '../JobComponents/JobList';
 import AddJobControl from '../AddJobControl';
+import { UpdateJobsFunction } from '../MainPage';
+import JobModel from '../../Models/JobModel';
 
 export interface Props {
   vehicle: VehicleModel,
   updateVehicle: Function,
-  updateJob: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel) => void,
+  updateJob: UpdateJobsFunction;
   newJob: (vehicle: VehicleModel) => void;
   handleSelection: Function,
 };
@@ -28,7 +30,7 @@ export default class VehicleDisplay extends Component<Props, {}> {
   }
 
   handleJobChange(e: ChangeEvent<HTMLInputElement>) {
-    this.props.updateJob(e, this.props.vehicle);
+    this.props.updateJob(e, this.props.vehicle, new JobModel('', '', 0));
   }
 
   handleNewJob(e: MouseEvent) {

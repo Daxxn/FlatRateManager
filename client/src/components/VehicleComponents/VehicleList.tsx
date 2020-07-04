@@ -2,18 +2,19 @@ import React, { Component, ChangeEvent } from 'react';
 // import PropTypes from 'prop-types';
 import VehicleDisplay from './VehicleDisplay';
 import VehicleModel from '../../Models/VehicleModel';
+import JobModel from '../../Models/JobModel';
+import { UpdateJobsFunction } from '../MainPage';
 
 export interface Props {
   allVehicles: VehicleModel[],
   updateVehicles: (e: ChangeEvent<HTMLInputElement>, vehicleId: string) => void;
-  updateJobs: (e: ChangeEvent<HTMLInputElement>, vehicle: VehicleModel) => void;
+  updateJobs: UpdateJobsFunction;
   newVehicle: () => void,
   newJob: (Vehicle: VehicleModel) => void;
   handleSelection: (id: string) => void;
 }
 
 class VehicleList extends Component<Props, {}> {
-
   render() {
     const vehicles = this.props.allVehicles !== undefined || null ? this.props.allVehicles.map((vehicle) => {
       return <VehicleDisplay

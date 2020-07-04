@@ -6,11 +6,34 @@ GET http://localhost:9000/users/id/5eeef2a42eaf93267067ae47
 
 ###
 
-POST http://localhost:9000/users
+GET http://localhost:9000/users/test
+
+###
+
+POST http://localhost:9000/users/register
 Content-Type: application/json
 
 {
-  "userName": "cody",
+  "userName": "cody2",
+  "password": "test"
+}
+
+###
+
+POST http://localhost:9000/users/register
+Content-Type: application/json
+
+{
+  "userName": "codytest2",
+  "password": "test"
+}
+
+###
+
+DELETE http://localhost:9000/users/delete
+Content-Type: application/json
+
+{
   "password": "test"
 }
 
@@ -20,6 +43,16 @@ POST http://localhost:9000/users/login
 Content-Type: application/json
 
 {
-  "userName": "cody",
+  "userName": "cody2",
+  "password": "test"
+}
+
+###
+
+POST http://localhost:9000/users/login
+Content-Type: application/json
+
+{
+  "userName": "codytest2",
   "password": "test"
 }

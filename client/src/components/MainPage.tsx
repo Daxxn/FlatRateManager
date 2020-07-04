@@ -310,3 +310,5 @@ class MainPage extends Component<Props, State> {
 }
 
 export default MainPage;
+
+export type UpdateJobsFunction = typeof MainPage.prototype.updateJob;
