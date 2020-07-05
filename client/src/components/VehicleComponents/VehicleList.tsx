@@ -3,7 +3,7 @@ import VehicleModel from '../../Models/VehicleModel';
 import VehicleDisplay from './VehicleDisplay';
 
 export interface VehicleListProps {
-  allVehicles: VehicleModel[];
+  allVehicles: VehicleModel[] | null;
 }
 
 export default function VehicleList(props: VehicleListProps) {

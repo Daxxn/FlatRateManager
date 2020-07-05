@@ -11,7 +11,7 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
   const { make, model, year, jobs } = vehicle;
   return (
     <li>
-    <p>{make}</p>
+      <p>{make}</p>
       <p>{model}</p>
       <p>{year}</p>
       <JobList allJobs={jobs} />
