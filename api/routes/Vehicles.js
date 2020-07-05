@@ -1,14 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const VehicleModel = require('../models/VehicleModel');
-const JobModel = require('../models/JobModel');
-const checkAuthentication = require('../checkAuth');
 
 function findVehicleById(vehicleId) {
   return new Promise((resolve, reject) => {
     VehicleModel
       .findOne({_id: vehicleId})
-      // .populate('jobs')
       .exec((err, foundVehicle) => {
       if(err) {
         reject(err);
@@ -24,8 +21,6 @@ function findVehicleById(vehicleId) {
 async function getAllJobs(vehicle) {
   return await vehicle.populate('jobs').execPopulate();
 }
-
-// router.use(checkAuthentication);
 
 router.get('/', async (req, res, next) => {
   try {
@@ -53,7 +48,11 @@ router.get('/:id', (req, res) => {
 });
 
 router.post('/', async (req, res) => {
-  if (req.body && req.body.make) {
+  if (req.body
+    && req.body.make
+    && req.body.model
+    && req.body.year
+  ) {
     const newVehicle = new VehicleModel({
       make: req.body.make,
       model: req.body.model,
@@ -66,6 +65,10 @@ router.post('/', async (req, res) => {
     } catch (err) {
       res.status(500).json(err);
     }
+  } else {
+    res.status(405).json({
+      message: "Body is missing required values.",
+    })
   }
 });
 

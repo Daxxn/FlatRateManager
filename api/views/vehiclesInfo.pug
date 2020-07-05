@@ -7,13 +7,47 @@ block content
 
     br
 
-    h4 Get All Vehicles:
-    div(class="endpoint-desc")
-      p GET /vehicles
-      p Gets all vehicles stored in database.
-      p No Body.
+    div(class="endpoint-div")
+      h4 Get All Vehicles:
+      div(class="endpoint-desc")
+        p GET /vehicles
+        p Gets all vehicles stored in database.
+        p No Body.
 
-      div(class="example-div")
-        h5 Example
-        p /vehicles
+        div(class="example-div")
+          h5 Example
+          p /vehicles
+
+        div(class="example-result")
+          h5 Success:
+          p [ { jobs: [], _id: 5ed5e10ffb29901318391120, make: 'blank', model: 'blank', year: 0, __v: 0 }, ... ]
+
+        div(class="example-fail")
+          h5 Fail:
+          p { "message": "Error message" }
+
+    div(class="endpoint-div")
+      h4 Post a vehicle:
+      div(class="endpoint-desc")
+        p POST /vehicles
+        p Post a new vehicle to the database.
+        ul Body:
+          li make
+          li model
+          li year
+          li (Optional) jobs
+
+        div(class="example-div")
+          h5 Example
+          p /vehicles
+          p body
+          p { "make": "toyota", "model": "camry", "year": "2018" }
+
+        div(class="example-result")
+          h5 Success:
+          p { "make": "toyota", "model": "camry", "year": "2018" }
+
+        div(class="example-fail")
+          h5 Fail:
+          p { "message": "Error Message" }
         

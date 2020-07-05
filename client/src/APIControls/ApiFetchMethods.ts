@@ -102,7 +102,7 @@ export function patchRequest<TModel>(
   const { urlBuilder, methods, headers } = fetchHelper;
   return new Promise<TModel>((resolve, reject) => {
     fetch(urlBuilder(endpoint), {
-      method: methods.post,
+      method: methods.patch,
       headers,
       body: JSON.stringify(data)
     })
@@ -114,9 +114,12 @@ export function patchRequest<TModel>(
 
 export function postRequest<TModel>(data: JobModel | VehicleModel | UserModel, endpoint: string) {
   const { urlBuilder, methods, headers } = fetchHelper;
+  console.log(data);
+  console.log(endpoint);
+  console.log(urlBuilder(endpoint));
   return new Promise<TModel>((resolve, reject) => {
     fetch(urlBuilder(endpoint), {
-      method: methods.patch,
+      method: methods.post,
       headers,
       body: JSON.stringify(data)
     })

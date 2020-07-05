@@ -58,13 +58,20 @@ const MainPage = () => {
     }
   };
 
-  const postVehicle = async (newVehicle: VehicleModel) => {
-    try {
-      const vehicle = await postRequest<VehicleModel>(newVehicle, 'vehicles');
-      console.log(vehicle);
-    } catch (err) {
-      setMessage(err.message);
-    }
+  // const postVehicle = async (newVehicle: VehicleModel) => {
+  //   try {
+  //     const vehicle = await postRequest<VehicleModel>(newVehicle, 'vehicles');
+  //     console.log(vehicle);
+  //     return await (vehicle as VehicleModel);
+  //   } catch (err) {
+  //     setMessage(err.message);
+  //   }
+  // };
+
+  const postVehicle = (newVehicle: VehicleModel) => {
+    return postRequest<VehicleModel>(newVehicle, 'vehicles')
+      .then(vehicle => vehicle)
+      .catch(err => setMessage(err.message));
   };
 
   const postJob = async (newJob: JobModel) => {
@@ -77,12 +84,27 @@ const MainPage = () => {
   }
   //#endregion
 
+  // const createNewVehicle = () => {
+  //   const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
+  //   const vehicleRes = postVehicle(newVehicle).then(vehicle => vehicle).catch(err => setMessage(err));
+  //   if (vehicleRes) {
+  //     const tempVehicles = allVehicles ? allVehicles : [];
+  //     tempVehicles.push(vehicleRes);
+  //     setAllVehicles(tempVehicles);
+  //   }
+  // }
+
   const createNewVehicle = () => {
     const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
-    const tempVehicles = allVehicles ? allVehicles : [];
-    tempVehicles.push(newVehicle);
-    setAllVehicles(tempVehicles);
-    postVehicle(newVehicle);
+    postVehicle(newVehicle)
+      .then(vehicle => {
+        if (vehicle) {
+          const tempVehicles = allVehicles ? allVehicles : [];
+          tempVehicles.push(vehicle);
+          setAllVehicles(tempVehicles);
+        }
+      })
+      .catch(err => setMessage(err.message));
   }
 
   const createNewJob = (vehicle: VehicleModel) => {
@@ -156,6 +178,7 @@ const MainPage = () => {
           vehicles={allVehicles}
           updateVehicles={updateVehicle}
           updateJobs={updateJob}
+          addNewVehicle={createNewVehicle}
         />
       </div>
       <AllJobList allJobs={allJobs} updateJobs={updateJob} />

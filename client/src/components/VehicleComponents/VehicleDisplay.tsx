@@ -29,19 +29,6 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
   const [make, setMake] = useState(vehicleProp.make);
   const [model, setModel] = useState(vehicleProp.model);
   const [year, setYear] = useState(vehicleProp.year);
-  //const [jobs, setJobs] = useState(vehicleProp.jobs);
-  // const { make, model, year, jobs } = vehicle;
-
-  // const handleInputChange = (id: 'make' | 'model' | 'year', value: string | number) => {
-  //   const tempInput = {
-  //     [id]: value,
-  //   };
-  //   console.log(tempInput);
-  //   const newVehicle = Object.assign(vehicleProp, tempInput);
-  //   console.log(newVehicle);
-  //   setVehicle(newVehicle);
-  //   // updateVehicle(newVehicle);
-  // };
 
   const updateState = () => {
     const newVehicle = vehicle;
@@ -78,11 +65,11 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
 
   const styles = makeStyle();
   return (
-    <li key={vehicle._id} onBlur={() => updateVehicle(vehicle)} style={styles.container}>
+    <div key={vehicle._id} onBlur={() => updateVehicle(vehicle)} style={styles.container}>
       <VehicleInput id="make" vehicleId={vehicle._id} value={make} onChange={handleInputChange} />
       <VehicleInput id="model" vehicleId={vehicle._id} value={model} onChange={handleInputChange} />
       <VehicleInput id="year" vehicleId={vehicle._id} value={year} onChange={handleInputChange} />
       <JobList allJobs={vehicle.jobs} updateJobs={handleUpdateJob}/>
-    </li>
+    </div>
   )
 }

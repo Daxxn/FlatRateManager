@@ -1,1 +1,23 @@
 GET http://localhost:9000/vehicles
+
+###
+
+POST http://localhost:9000/vehicles
+Content-Type: application/json
+
+{
+  "make": "Toyota",
+  "model": "Sequoia",
+  "year": 2014
+}
+
+###
+
+POST http://localhost:9000/vehicles
+Content-Type: application/json
+
+{
+  "makesdf": "Toyota",
+  "model": "Sequoia",
+  "year": 2014
+}
