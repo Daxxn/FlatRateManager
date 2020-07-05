@@ -3,10 +3,10 @@ import VehicleModel from '../Models/VehicleModel';
 import UserModel from '../Models/UserModel';
 
 const fetchHelper = {
-  baseUrl: process.env.REACT_SERVER_URL,
+  baseUrl: process.env.REACT_APP_SERVER_URL,
   urlBuilder: (endpoint: string) => {
-    console.log(process.env.REACT_SERVER_URL + endpoint);
-    return process.env.REACT_SERVER_URL + endpoint;
+    console.log(process.env.REACT_APP_SERVER_URL + endpoint);
+    return process.env.REACT_APP_SERVER_URL + endpoint;
   },
   methods: {
     get: 'GET',
@@ -18,21 +18,6 @@ const fetchHelper = {
     'Content-Type': 'application/json',
   }
 }
-
-// export default function getVehicles(): Promise<VehicleModel[]> {
-//   const { urlBuilder, methods, headers } = fetchHelper;
-//   return new Promise<VehicleModel[]>((resolve, reject) => {
-//     fetch(urlBuilder('vehicles'), {
-//       method: methods.get,
-//       headers
-//     })
-//     .then(res => res.json())
-//     .then(data => resolve(data))
-//     .catch(err => {
-//       reject(err);
-//     })
-//   })
-// }
 
 export async function getVehicles(): Promise<VehicleModel[]> {
   const { urlBuilder, methods, headers } = fetchHelper;
