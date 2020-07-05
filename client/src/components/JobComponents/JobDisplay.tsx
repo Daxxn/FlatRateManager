@@ -1,27 +1,45 @@
-import React, { ChangeEvent } from 'react';
+import React, { useState } from 'react';
 import '../../styles/JobDisplay.css';
 import JobModel from '../../Models/JobModel';
+import VehicleInput from '../BaseComponents/VehicleInput';
+import JobInput from '../BaseComponents/JobInput';
 
 export interface JobDisplayProps {
-  job: JobModel,
-  // updateJob: (id: string) => void,
+  jobProp: JobModel,
+  updateJob: (updatedJob: JobModel) => void,
 }
 
 export default function JobDisplay(props: JobDisplayProps) {
-  const { job } = props;
-  /**
-   * w
-   * @param e Event Args
-   */
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target);
-    // updateJob(job._id, )
+  const { jobProp, updateJob } = props;
+  const [job, setJob] = useState(jobProp);
+  const [name, setName] = useState(jobProp.job);
+  const [time, setTime] = useState(jobProp.time);
+
+  const updateState = () => {
+    const newJob = job;
+    newJob.job = name;
+    newJob.time = time;
+    setJob(newJob);
+  }
+
+  const handleInputChange = (id: 'job' | 'time', value: string | number) => {
+    switch (id) {
+      case 'job':
+        setName(value as string);
+        break;
+      case 'time':
+        setTime(value as number);
+        break;
+      default:
+        throw new Error('Unknown ID!!');
+    }
+    updateState();
   }
 
   return (
-    <li key={job._id} className="joblist">
-        <input id="job" type="text" onChange={handleChange} value={job.job} />
-        <input id="time" type="number" onChange={handleChange} value={job.time} />
+    <li onBlur={() => updateJob(job)}>
+      <JobInput id="job" jobId={job._id} value={name} handleChange={handleInputChange} />
+      <JobInput id="time" jobId={job._id} value={time} handleChange={handleInputChange} />
     </li>
   );
 }

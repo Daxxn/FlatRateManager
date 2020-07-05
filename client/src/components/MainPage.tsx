@@ -150,7 +150,8 @@ const MainPage = () => {
       </div>
       <div className="datadisplaycontainer"> 
         <p>Data Output</p>
-        <VehicleList vehicles={allVehicles} updateVehicles={updateVehicle} />
+        {message ? <p>{message}</p> : ''}
+        <VehicleList vehicles={allVehicles} updateVehicles={updateVehicle} updateJobs={updateJob} />
       </div>
     </div>
   );

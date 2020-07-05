@@ -16,14 +16,14 @@ const makeStyles = (id: string) => {
   };
 }
 
-export interface InputProps {
+export interface VehicleInputProps {
   id: 'make' | 'model' | 'year';
   vehicleId: string;
   value: string | number;
   onChange: (id: 'make' | 'model' | 'year', value: string | number) => void;
 }
 
-export default function Input(props: InputProps) {
+export default function VehicleInput(props: VehicleInputProps) {
   const { id, vehicleId, value, onChange } = props;
   const styles = makeStyles(id)
   return (
@@ -32,8 +32,8 @@ export default function Input(props: InputProps) {
       <input
         key={`${vehicleId}-${id}`}
         style={styles}
-        id={id}
-        type={typeof value === typeof '' ? 'text' : 'number'}
+        id={`${vehicleId}-${id}`}
+        type={id === 'year' ? 'number' : 'text'}
         value={value}
         onChange={(e) => onChange(id, e.target.value)}
       />

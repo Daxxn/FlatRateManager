@@ -7,7 +7,7 @@ const makeStyles = () => {
     container: {
       display: 'grid',
       gridColum: '1 / 4',
-      gridRow: '2',
+      gridRow: '2 / 2',
       // gridTemplateColumns: 'repeat(2, 1fr)',
     },
   };
@@ -15,18 +15,19 @@ const makeStyles = () => {
 
 export interface JobListProps {
   allJobs: JobModel[],
+  updateJobs: (updatedJob: JobModel) => void;
 };
 
 
 export default function JobList(props: JobListProps) {
-  const { allJobs } = props;
+  const { allJobs, updateJobs } = props;
 
   const styles = makeStyles();
   return (
     <div style={styles.container}>
       {allJobs && allJobs.length > 0 ? allJobs.map(job => {
         return (
-          <JobDisplay job={job} />
+          <JobDisplay jobProp={job} updateJob={updateJobs} />
         )
       }) : (
         <p>No Jobs.</p>

@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import VehicleModel from '../../Models/VehicleModel';
 import JobList from '../JobComponents/JobList';
-import Input from '../BaseComponents/input';
+import VehicleInput from '../BaseComponents/VehicleInput';
+import JobModel from '../../Models/JobModel';
 
 export interface VehicleDisplayProps {
   vehicleProp: VehicleModel;
   updateVehicle: (updatedVehicle: VehicleModel) => void;
+  updateJobs: (updatedJob: JobModel) => void;
 }
 
 const makeStyle = () => {
@@ -22,12 +24,12 @@ const makeStyle = () => {
 };
 
 export default function VehicleDisplay(props: VehicleDisplayProps) {
-  const { vehicleProp, updateVehicle } = props;
+  const { vehicleProp, updateVehicle, updateJobs } = props;
   const [vehicle, setVehicle] = useState(vehicleProp);
   const [make, setMake] = useState(vehicleProp.make);
   const [model, setModel] = useState(vehicleProp.model);
   const [year, setYear] = useState(vehicleProp.year);
-  const [jobs, setJobs] = useState(vehicleProp.jobs);
+  //const [jobs, setJobs] = useState(vehicleProp.jobs);
   // const { make, model, year, jobs } = vehicle;
 
   // const handleInputChange = (id: 'make' | 'model' | 'year', value: string | number) => {
@@ -66,13 +68,21 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
     updateState();
   }
 
+  /**
+   * Remove later if needed.
+   * @param updatedJob 
+   */
+  const handleUpdateJob = (updatedJob: JobModel) => {
+    updateJobs(updatedJob);
+  }
+
   const styles = makeStyle();
   return (
     <li key={vehicle._id} onBlur={() => updateVehicle(vehicle)} style={styles.container}>
-      <Input id="make" vehicleId={vehicle._id} value={make} onChange={handleInputChange} />
-      <Input id="model" vehicleId={vehicle._id} value={model} onChange={handleInputChange} />
-      <Input id="year" vehicleId={vehicle._id} value={year} onChange={handleInputChange} />
-      <JobList allJobs={jobs} />
+      <VehicleInput id="make" vehicleId={vehicle._id} value={make} onChange={handleInputChange} />
+      <VehicleInput id="model" vehicleId={vehicle._id} value={model} onChange={handleInputChange} />
+      <VehicleInput id="year" vehicleId={vehicle._id} value={year} onChange={handleInputChange} />
+      <JobList allJobs={vehicle.jobs} updateJobs={handleUpdateJob}/>
     </li>
   )
 }
