@@ -1,24 +1,29 @@
-import React, { SyntheticEvent } from 'react';
+import React from 'react';
 import JobModel from '../../Models/JobModel';
 import JobDisplay from './JobDisplay';
 
+const makeStyles = () => {
+  return {
+    container: {
+      display: 'grid',
+      gridColum: '1 / 4',
+      gridRow: '2',
+      // gridTemplateColumns: 'repeat(2, 1fr)',
+    },
+  };
+}
+
 export interface JobListProps {
   allJobs: JobModel[],
-  // updateJob: Function,
-  // newJob: (e: MouseEvent) => void,
-  //handleSelection: Function,
 };
 
 
 export default function JobList(props: JobListProps) {
   const { allJobs } = props;
 
-  const newJob = (e: SyntheticEvent<HTMLElement>) => {
-    console.log(e.currentTarget);
-  };
-
+  const styles = makeStyles();
   return (
-    <div onSelect={newJob}>
+    <div style={styles.container}>
       {allJobs && allJobs.length > 0 ? allJobs.map(job => {
         return (
           <JobDisplay job={job} />

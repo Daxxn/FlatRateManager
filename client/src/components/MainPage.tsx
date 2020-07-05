@@ -11,6 +11,7 @@ import {
   postRequest,
   patchRequest,
 } from '../APIControls/ApiFetchMethods';
+import { assert } from 'console';
 
 const MainPage = () => {
   const [allVehicles, setAllVehicles] = useState<VehicleModel[] | null>(null);
@@ -93,6 +94,27 @@ const MainPage = () => {
     }
   }
   //#endregion
+
+  //#region Update functions
+  const updateVehicle = (updatedVehicle: VehicleModel) => {
+    console.log('in Update vehicle');
+    if (allVehicles) {
+      const tempvehicles = allVehicles;
+      const index = tempvehicles?.findIndex(vehicle => vehicle._id === updatedVehicle._id);
+      tempvehicles[index] = Object.assign(tempvehicles[index], updatedVehicle);
+      setAllVehicles(tempvehicles);
+    }
+  };
+
+  const updateJob = (updatedJob: JobModel) => {
+    if (allJobs) {
+      const tempJobs = allJobs;
+      const index = tempJobs?.findIndex(job => job._id === updatedJob._id);
+      tempJobs[index] = Object.assign(tempJobs[index], updatedJob);
+      setAllJobs(tempJobs);
+    }
+  };
+  //#endregion
   
   //#region Helper Methods:
   /**
@@ -128,7 +150,7 @@ const MainPage = () => {
       </div>
       <div className="datadisplaycontainer"> 
         <p>Data Output</p>
-        <VehicleList allVehicles={allVehicles} />
+        <VehicleList vehicles={allVehicles} updateVehicles={updateVehicle} />
       </div>
     </div>
   );
@@ -137,3 +159,4 @@ const MainPage = () => {
 export default MainPage;
 
 export type UpdateJobsFunction = typeof MainPage.prototype.updateJob;
+export type UpdateVehiclesFunction = typeof MainPage.prototype.updateVehicle;

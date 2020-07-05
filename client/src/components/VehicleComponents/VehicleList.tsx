@@ -3,16 +3,18 @@ import VehicleModel from '../../Models/VehicleModel';
 import VehicleDisplay from './VehicleDisplay';
 
 export interface VehicleListProps {
-  allVehicles: VehicleModel[] | null;
+  vehicles: VehicleModel[] | null;
+  updateVehicles: (updatedVehicle: VehicleModel) => void;
 }
 
 export default function VehicleList(props: VehicleListProps) {
-  const { allVehicles } = props;
+  const { vehicles, updateVehicles } = props;
+
   return (
     <div>
-      {allVehicles && allVehicles.length > 0 ? allVehicles.map(vehicle => {
+      {vehicles && vehicles.length > 0 ? vehicles.map(vehicle => {
         return (
-          <VehicleDisplay vehicle={vehicle} />
+          <VehicleDisplay key={vehicle._id} updateVehicle={updateVehicles} vehicleProp={vehicle} />
         )
       }) : (
         <p>No Vehciles.</p>
