@@ -7,12 +7,60 @@ a {
   color: #00B7FF;
 }
 
+h1 {
+  font-size: 2.8em;
+}
+
+h2 {
+  font-size: 2.5em;
+}
+
+h4 {
+  font-size: 2em;
+}
+
+h5 {
+  font-size: 1.3em;
+}
+
+p {
+  font-size: 1em;
+}
+
+.link-div {
+  padding: 4px;
+}
+
 .endpoint-div {
   padding: 4px;
+  border: solid 3px #002dc0;
+  border-radius: 2px 15px 15px;
 }
 
 .endpoint-link {
   font-size: medium;
   padding: 8px;
   color: #00B7FF;
+}
+
+.endpoint-desc {
+  padding-left: 10px;
+}
+
+.example-div {
+  border: solid 3px #008ac0;
+  border-radius: 12px 6px;
+  padding: 4px;
+}
+
+.example-result {
+  border: solid 3px #00c0a6;
+  border-radius: 2px 2px 8px 8px;
+  padding: 4px;
+}
+
+.example-fail {
+  border: solid 3px #c04d00;
+  border-radius: 2px 2px 8px 8px;
+  padding: 4px;
 }

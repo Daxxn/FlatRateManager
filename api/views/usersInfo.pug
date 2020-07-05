@@ -7,16 +7,33 @@ block content
 
     br
 
-    h4 Login/Logout Endpoint:
-    p POST /users/login|logout
-    p User login data in body.
-    ul required body variables:
-      li user name
-      li password
+    div(class="endpoint-div")
+      h4 Login/Logout Endpoint:
+      p POST /users/login|logout
+      p User login data in body.
+      ul required body variables:
+        li user name
+        li password
 
     br
 
-    h4 Update user data:
-    p PATCH /users/:userID
-    p updated user values in body.
-    p No specific body variables required.
+    div(class="endpoint-div")
+      h4 Update user data:
+      div(class="endpoint-desc")
+        p PATCH /users/:userID
+        p updated user values in body.
+        p No specific body variables required.
+
+        div(class="example-div")
+          h5 Example
+          p /users/5eeef2a42eaf93267067ae47
+          p body
+          p { "userName": "cody", "password": "test" }
+
+        div(class="example-result")
+          h5 Success:
+          p { "message": "done." }
+
+        div(class="example-fail")
+          h5 Fail:
+          p { "message": "Error Message"}
