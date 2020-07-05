@@ -1,0 +1,22 @@
+extends info.pug
+
+block content
+  div
+    h2 Users Endpoint:
+    p /users
+
+    br
+
+    h4 Login/Logout Endpoint:
+    p POST /users/login|logout
+    p User login data in body.
+    ul required body variables:
+      li user name
+      li password
+
+    br
+
+    h4 Update user data:
+    p PATCH /users/:userID
+    p updated user values in body.
+    p No specific body variables required.

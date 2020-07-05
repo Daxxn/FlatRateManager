@@ -3,9 +3,4 @@ extends layout.pug
 block content
   h1= title
   p This controls access to the #{title}
-
-  div
-    h4 Users Endpoint:
-    //- - for (let i = 0; i < endpoints.length; i++)
-    //-   li endpoints
-    p #{userName}
+  a(href="/info") More Info
