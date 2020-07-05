@@ -11,7 +11,6 @@ import {
   postRequest,
   patchRequest,
 } from '../APIControls/ApiFetchMethods';
-import JobList from './JobComponents/JobList';
 import AllJobList from './JobComponents/AllJobsList';
 
 const MainPage = () => {
@@ -165,6 +164,3 @@ const MainPage = () => {
 }
 
 export default MainPage;
-
-export type UpdateJobsFunction = typeof MainPage.prototype.updateJob;
-export type UpdateVehiclesFunction = typeof MainPage.prototype.updateVehicle;

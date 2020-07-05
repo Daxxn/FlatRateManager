@@ -1,5 +1,4 @@
 import React from 'react';
-import { Interface } from 'readline';
 import JobModel from '../../Models/JobModel';
 import JobList from './JobList';
 
