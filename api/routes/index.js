@@ -3,7 +3,8 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Flat Rate Time Manager API' });
+  console.log(req.session.user);
+  res.render('index', { title: 'Flat Rate Time Manager API', userName: req.session.user ? req.session.user.userName : 'no user logged in.' });
 });
 
 module.exports = router;
