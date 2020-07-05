@@ -25,16 +25,19 @@ export default function JobInput(props: JobInputProps) {
   const { id, jobId, value, handleChange } = props;
   const styles = makeStyles(id);
   return (
-    <input
-      key={`${jobId}-${id}`}
-      style={styles}
-      id={`${jobId}-${id}`}
-      type={id === 'job' ? 'text' : 'number'}
-      value={value}
-      onChange={
-      (e: ChangeEvent<HTMLInputElement>) => {
-        handleChange(id, e.target.value);
-      }}
-    />
+    <div>
+      <p>{`${id}:`}</p>
+      <input
+        key={`${jobId}-${id}`}
+        style={styles}
+        id={`${jobId}-${id}`}
+        type={id === 'job' ? 'text' : 'number'}
+        value={value}
+        onChange={
+        (e: ChangeEvent<HTMLInputElement>) => {
+          handleChange(id, e.target.value);
+        }}
+      />
+    </div>
   )
 }

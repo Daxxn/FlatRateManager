@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../../styles/JobDisplay.css';
 import JobModel from '../../Models/JobModel';
-import VehicleInput from '../BaseComponents/VehicleInput';
 import JobInput from '../BaseComponents/JobInput';
 
 export interface JobDisplayProps {
@@ -37,9 +36,9 @@ export default function JobDisplay(props: JobDisplayProps) {
   }
 
   return (
-    <li onBlur={() => updateJob(job)}>
+    <div onBlur={() => updateJob(job)}>
       <JobInput id="job" jobId={job._id} value={name} handleChange={handleInputChange} />
       <JobInput id="time" jobId={job._id} value={time} handleChange={handleInputChange} />
-    </li>
+    </div>
   );
 }

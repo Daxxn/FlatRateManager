@@ -14,7 +14,7 @@ const makeStyles = () => {
 }
 
 export interface JobListProps {
-  allJobs: JobModel[],
+  allJobs: JobModel[] | null,
   updateJobs: (updatedJob: JobModel) => void;
 };
 

@@ -11,7 +11,8 @@ import {
   postRequest,
   patchRequest,
 } from '../APIControls/ApiFetchMethods';
-import { assert } from 'console';
+import JobList from './JobComponents/JobList';
+import AllJobList from './JobComponents/AllJobsList';
 
 const MainPage = () => {
   const [allVehicles, setAllVehicles] = useState<VehicleModel[] | null>(null);
@@ -20,6 +21,7 @@ const MainPage = () => {
 
   useEffect(() => {
     getAllVehicles();
+    getAllJobs();
   }, [])
 
   const getAllVehicles = () => {
@@ -149,10 +151,15 @@ const MainPage = () => {
         <MenuBar />
       </div>
       <div className="datadisplaycontainer"> 
-        <p>Data Output</p>
+        <h4>Data Output</h4>
         {message ? <p>{message}</p> : ''}
-        <VehicleList vehicles={allVehicles} updateVehicles={updateVehicle} updateJobs={updateJob} />
+        <VehicleList
+          vehicles={allVehicles}
+          updateVehicles={updateVehicle}
+          updateJobs={updateJob}
+        />
       </div>
+      <AllJobList allJobs={allJobs} updateJobs={updateJob} />
     </div>
   );
 }
