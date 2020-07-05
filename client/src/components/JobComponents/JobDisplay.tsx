@@ -1,35 +1,27 @@
-import React, { Component } from 'react';
+import React, { ChangeEvent } from 'react';
 import '../../styles/JobDisplay.css';
 import JobModel from '../../Models/JobModel';
 
-export interface Props {
+export interface JobDisplayProps {
   job: JobModel,
-  updateJob: Function,
+  // updateJob: (id: string) => void,
 }
 
-class JobDisplay extends Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
+export default function JobDisplay(props: JobDisplayProps) {
+  const { job } = props;
   /**
    * w
    * @param e Event Args
    */
-  handleChange(e: any) {
-    const {id, value} = e.target;
-    this.props.updateJob(this.props.job._id, )
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target);
+    // updateJob(job._id, )
   }
 
-  render() {
-    const { job } = this.props;
-    return (
-      <li key={job._id} className="joblist">
-          <input id="job" type="text" onChange={this.handleChange} value={job.job} />
-          <input id="time" type="number" onChange={this.handleChange} value={job.time} />
-      </li>
-    );
-  }
+  return (
+    <li key={job._id} className="joblist">
+        <input id="job" type="text" onChange={handleChange} value={job.job} />
+        <input id="time" type="number" onChange={handleChange} value={job.time} />
+    </li>
+  );
 }
-export default JobDisplay;

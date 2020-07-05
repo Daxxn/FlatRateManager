@@ -1,8 +1,8 @@
 export default interface JobModel {
-  _id: string,
-  job: string,
-  time: number,
-};
+  _id: string;
+  job: string;
+  time: number;
+}
 
 export default class JobModel {
   constructor(id: string, job: string, time: number) {

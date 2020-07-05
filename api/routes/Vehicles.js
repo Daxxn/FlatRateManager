@@ -25,15 +25,16 @@ async function getAllJobs(vehicle) {
   return await vehicle.populate('jobs').execPopulate();
 }
 
-router.use(checkAuthentication);
+// router.use(checkAuthentication);
 
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const vehicles = await VehicleModel.find();
     console.log(vehicles);
     res.json(vehicles);
   } catch (err) {
     res.json({message: err});
+    next(err);
   }
 });
 

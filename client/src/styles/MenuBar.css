@@ -1,0 +1,38 @@
+.root {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.title {
+  grid-column: 3 / 5;
+}
+
+.login {
+  grid-column: 6 / 6;
+  background-color: transparent;
+  border-radius: 5px;
+  border: transparent;
+  margin: 10px 40px;
+  transition: background-color 200ms;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.login:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+
+}
+
+.loginmenu {
+  grid-column: 6 / 6;
+}
+
+.loginmenuopen {
+  display: inline-block;
+  background-color: #dbeeff;
+  border-radius: 10px;
+  grid-column: 6 / 6;
+}

@@ -13,7 +13,7 @@ const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const jobRouter = require('./routes/Jobs');
 const vehicleRouter = require('./routes/Vehicles');
-const { nextTick } = require('process');
+const checkAuthentication = require('./checkAuth');
 
 var app = express();
 
@@ -34,27 +34,14 @@ app.use(session({
   resave: false,
 }));
 
-const checkAuth = process.env.AUTH_DEV === false 
-  ? (req, res, next) => {
-    if (req.session && req.session.userId) {
-      next();
-    } else {
-      res.status(405).json({ message: 'must log in first.' });
-    }
-  } 
-  : (req, res, next) => {
-    console.log('auth dev mode. auth OFF!')
-    next();
-};
-
-// app.use(function(req, res, next) {
-//   checkAuth(req, res, next);
-// });
+// Checks for a logged in user before sending data
+// from the specified endpoints.
+app.use(['/jobs', '/vehicles'], checkAuthentication);
 
 app.use('/', indexRouter);
-app.use('/users', checkAuth, usersRouter);
-app.use('/jobs', checkAuth, jobRouter);
-app.use('/vehicles', checkAuth, vehicleRouter);
+app.use('/users', usersRouter);
+app.use('/jobs', jobRouter);
+app.use('/vehicles', vehicleRouter);
 
 
 // catch 404 and forward to error handler

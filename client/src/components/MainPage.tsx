@@ -1,14 +1,13 @@
 import React, { Component, MouseEvent, ChangeEvent } from 'react';
-//import PropTypes from 'prop-types';
-// import VehicleDisplay from './VehicleDisplay';
 import JobDisplay from './JobComponents/JobDisplay';
 import '../styles/MainPage.css';
 import VehicleList from './VehicleComponents/VehicleList';
-import Controlls from './Controlls';
 import VehicleModel from '../Models/VehicleModel';
 import JobModel from '../Models/JobModel';
 //import APIModel from '../APIControls/DataModels/APIModel';
 import APIControl from '../APIControls/APIControl';
+import MenuBar from './MenuBar';
+import { getVehicles } from '../APIControls/ApiFetchMethods';
 
 export interface Props {
   APIData: object,
@@ -47,11 +46,39 @@ class MainPage extends Component<Props, State> {
     this.createNewVehicle = this.createNewVehicle.bind(this);
     this.createNewJob = this.createNewJob.bind(this);
     this.handleSelectedVehicle = this.handleSelectedVehicle.bind(this);
+    this.getAllVehicles = this.getAllVehicles.bind(this);
   }
 
   componentDidMount() {
-    this.getallVehiclesDB();
-    this.getallJobsDB();
+    // this.getallVehiclesDB();
+    // this.getallJobsDB();
+    console.log('in did mount');
+    this.getAllVehicles();
+  }
+
+  getAllVehicles() {
+    getVehicles()
+      .then(allVehicles => {
+        this.setState({
+          allVehicles
+        });
+      })
+      .catch(err => {
+        this.setState({
+          message: err.message,
+        });
+      });
+    // try {
+    //   const vehicles = getVehicles();
+    //   console.log(vehicles);
+    //   this.setState({
+    //     allVehicles: vehicles,
+    //   });
+    // } catch (err) {
+    //   this.setState({
+    //     message: err.message,
+    //   })
+    // }
   }
 
   //#region API Fetch Requests
@@ -283,24 +310,16 @@ class MainPage extends Component<Props, State> {
   //#endregion
 
   render() {
+    const {allVehicles} = this.state;
     return (
       <div className="maincontainer">
+        <div className="menucontainer">
+          <MenuBar />
+        </div>
         <div className="datadisplaycontainer"> 
           <p>Data Output</p>
-          <VehicleList 
-            allVehicles={this.state.allVehicles}
-            updateVehicles={this.updateVehicle}
-            updateJobs={this.updateJob}
-            newVehicle={this.createNewVehicle}
-            handleSelection={this.handleSelectedVehicle}
-            newJob={this.createNewJob}/>
-          {/* <JobDisplay allJobs={this.state.allJobs} /> */}
+          <VehicleList allVehicles={allVehicles} />
         </div>
-        <Controlls
-          onGetVehiclesClick={this.onGetVehiclesClick}
-          onGetJobsClick={this.onGetJobsClick}
-          getOneVehicle={this.getOneVehicle}
-          selectedVehicleID={this.state.selectedVehicleID} />
         <div>
           {this.state.returnedVehicle === (undefined || null) ? <p></p> : <p>{this.state.returnedVehicle.model}</p>}
         </div>
