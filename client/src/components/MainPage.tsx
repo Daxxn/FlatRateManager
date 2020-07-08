@@ -9,7 +9,8 @@ import {
   getJobs,
   getVehicle,
   postRequest,
-  patchRequest,
+  postBlankVehicle,
+  // patchRequest,
 } from '../APIControls/ApiFetchMethods';
 import AllJobList from './JobComponents/AllJobsList';
 
@@ -49,14 +50,14 @@ const MainPage = () => {
     }
   }
 
-  const patchVehicles = async (vehicles: VehicleModel[]) => {
-    try {
-      const newVehicles = await patchRequest<VehicleModel[]>(vehicles, 'vehicles');
-      console.log(newVehicles);
-    } catch (err) {
-      setMessage(err.message);
-    }
-  };
+  // const patchVehicles = async (vehicles: VehicleModel[]) => {
+  //   try {
+  //     const newVehicles = await patchRequest<VehicleModel[]>(vehicles, 'vehicles');
+  //     console.log(newVehicles);
+  //   } catch (err) {
+  //     setMessage(err.message);
+  //   }
+  // };
 
   // const postVehicle = async (newVehicle: VehicleModel) => {
   //   try {
@@ -95,16 +96,18 @@ const MainPage = () => {
   // }
 
   const createNewVehicle = () => {
-    const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
-    postVehicle(newVehicle)
-      .then(vehicle => {
-        if (vehicle) {
-          const tempVehicles = allVehicles ? allVehicles : [];
-          tempVehicles.push(vehicle);
-          setAllVehicles(tempVehicles);
-        }
-      })
-      .catch(err => setMessage(err.message));
+    if (allVehicles) {
+      postBlankVehicle()
+        .then(vehicle => {
+          if (vehicle) {
+            const tempVehicles = [...allVehicles , vehicle];
+            setAllVehicles(tempVehicles);
+          }
+        })
+        .catch(err => {
+          setMessage(err.message);
+        });
+    }
   }
 
   const createNewJob = (vehicle: VehicleModel) => {

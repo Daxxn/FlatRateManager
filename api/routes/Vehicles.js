@@ -62,21 +62,23 @@ router.post('/blank', async (req, res, next) => {
 })
 
 router.post('/', async (req, res, next) => {
-  if (req.body && req.body.make && req.body.model && req.body.year ) {
-    try {
-      if (req.body._id) {
-        delete req.body._id;
+  if (req.body) {
+    if (req.body.make && req.body.model && req.body.year) {
+      try {
+        if (req.body._id) {
+          delete req.body._id;
+        }
+        const newVehicle = new VehicleModel({
+          make: req.body.make,
+          model: req.body.model,
+          year: req.body.year,
+          jobs: req.body.jobs,
+        });
+        const resVehicle = await newVehicle.save();
+        res.status(200).json(resVehicle);
+      } catch (err) {
+        res.status(500).json(err);
       }
-      const newVehicle = new VehicleModel({
-        make: req.body.make,
-        model: req.body.model,
-        year: req.body.year,
-        jobs: req.body.jobs,
-      });
-      const resVehicle = await newVehicle.save();
-      res.status(200).json(resVehicle);
-    } catch (err) {
-      res.status(500).json(err);
     }
   } else {
     console.log(req.body);
