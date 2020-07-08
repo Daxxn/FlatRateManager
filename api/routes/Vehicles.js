@@ -47,28 +47,42 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
-  if (req.body
-    && req.body.make
-    && req.body.model
-    && req.body.year
-  ) {
-    const newVehicle = new VehicleModel({
-      make: req.body.make,
-      model: req.body.model,
-      year: req.body.year,
-      jobs: req.body.jobs,
-    });
+router.post('/blank', async (req, res, next) => {
+  const newVehicle = new VehicleModel({
+    make: 'blank',
+    model: 'blank',
+    year: 0,
+  });
+  try {
+    const resvehicle = await newVehicle.save();
+    res.status(200).json(resvehicle);
+  } catch (err) {
+    next(err);
+  }
+})
+
+router.post('/', async (req, res, next) => {
+  if (req.body && req.body.make && req.body.model && req.body.year ) {
     try {
+      if (req.body._id) {
+        delete req.body._id;
+      }
+      const newVehicle = new VehicleModel({
+        make: req.body.make,
+        model: req.body.model,
+        year: req.body.year,
+        jobs: req.body.jobs,
+      });
       const resVehicle = await newVehicle.save();
       res.status(200).json(resVehicle);
     } catch (err) {
       res.status(500).json(err);
     }
   } else {
+    console.log(req.body);
     res.status(405).json({
       message: "Body is missing required values.",
-    })
+    });
   }
 });
 

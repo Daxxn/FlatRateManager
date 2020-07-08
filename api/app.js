@@ -59,8 +59,12 @@ app.use(function(err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   // render the error page
+  console.log(err);
   res.status(err.status || 500);
-  res.render('error');
+  res.json({
+    message: err,
+  });
+  //res.render('error');
 });
 
 mongoose.connect(process.env.DB_CONNECT, 
@@ -69,7 +73,12 @@ mongoose.connect(process.env.DB_CONNECT,
     useUnifiedTopology: true
   },
   (err) => {
-  console.log('Error: ', err);
+    if (err) {
+      console.log('Error: ', err);
+    } else {
+      console.log('connection made to database,');
+      console.log(`On PORT: ${process.env.PORT}`)
+    }
 })
 
 module.exports = app;
