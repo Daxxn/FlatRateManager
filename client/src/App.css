@@ -1,3 +1,10 @@
+:root {
+  --menubar-bg-color: #4f6ead;
+  --vehiclelist-bg-color: #f0f5ff;
+  --joblist-bg-color: #f0f8ff;
+  --vehicle-bg-color: #f1f1f115;
+}
+
 .App {
   text-align: center;
 }
@@ -35,4 +42,13 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+input {
+  border: none 0px;
+  padding: 0.1rem;
+}
+
+input:focus {
+  border: none 0px;
 }

@@ -1,10 +1,14 @@
 .root {
   display: grid;
+  background-color: var(--menubar-bg-color);
+  border-radius: 2rem 2rem 0px 0px;
   grid-template-columns: repeat(6, 1fr);
 }
 
 .title {
   grid-column: 3 / 5;
+  font-size: large;
+  text-shadow: rgba(0, 0, 0, 0.5) 0.02rem 0.01rem;
 }
 
 .login {

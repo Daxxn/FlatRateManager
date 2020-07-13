@@ -10,3 +10,31 @@
 .item.selected {
   background-color: aqua;
 }
+
+.vehiclecontainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  /* grid-template-rows: repeat(2, 1fr); */
+  grid-template-rows: 2em auto;
+  background-color: var(--vehicle-bg-color);
+  padding: 2px;
+  align-items: flex-start;
+}
+
+.vehicleinput {
+  padding: 0rem;
+  display: flex;
+  flex-direction: row;
+}
+
+.make {
+  grid-column: 1;
+}
+
+.model {
+  grid-column: 2;
+}
+
+.year {
+  grid-column: 3;
+}

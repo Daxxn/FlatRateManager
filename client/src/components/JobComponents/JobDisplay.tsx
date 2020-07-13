@@ -36,9 +36,11 @@ export default function JobDisplay(props: JobDisplayProps) {
   }
 
   return (
-    <div onBlur={() => updateJob(job)}>
-      <JobInput id="job" jobId={job._id} value={name} handleChange={handleInputChange} />
-      <JobInput id="time" jobId={job._id} value={time} handleChange={handleInputChange} />
+    <div className="jobframe" onBlur={() => updateJob(job)}>
+      <label className="jobtitle">Job</label>
+      <JobInput className="jobinput" id="job" jobId={job._id} value={name} handleChange={handleInputChange} />
+      <label className="timetitle">Time</label>
+      <JobInput className="timeinput" id="time" jobId={job._id} value={time} handleChange={handleInputChange} />
     </div>
   );
 }

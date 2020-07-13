@@ -3,25 +3,13 @@ import VehicleModel from '../../Models/VehicleModel';
 import JobList from '../JobComponents/JobList';
 import VehicleInput from '../BaseComponents/VehicleInput';
 import JobModel from '../../Models/JobModel';
+import '../../styles/VehicleDisplay.css';
 
 export interface VehicleDisplayProps {
   vehicleProp: VehicleModel;
   updateVehicle: (updatedVehicle: VehicleModel) => void;
   updateJobs: (updatedJob: JobModel) => void;
 }
-
-const makeStyle = () => {
-  return {
-    container: {
-      display: 'grid',
-      gridTemplateColumns: 'repeat(3, 1fr)',
-      gridTemplateRows: 'repeat(2, 1fr)',
-      backgroundColor: '#ffffff',
-      padding: '2px',
-      alignItems: 'flex-start',
-    },
-  };
-};
 
 export default function VehicleDisplay(props: VehicleDisplayProps) {
   const { vehicleProp, updateVehicle, updateJobs } = props;
@@ -63,12 +51,33 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
     updateJobs(updatedJob);
   }
 
-  const styles = makeStyle();
   return (
-    <div key={vehicle._id} onBlur={() => updateVehicle(vehicle)} style={styles.container}>
-      <VehicleInput id="make" vehicleId={vehicle._id} value={make} onChange={handleInputChange} />
-      <VehicleInput id="model" vehicleId={vehicle._id} value={model} onChange={handleInputChange} />
-      <VehicleInput id="year" vehicleId={vehicle._id} value={year} onChange={handleInputChange} />
+    <div
+      key={vehicle._id}
+      onBlur={() => updateVehicle(vehicle)}
+      className="vehiclecontainer"
+    >
+      <VehicleInput
+        css="vehicleinput make"
+        id="make"
+        vehicleId={vehicle._id}
+        value={make}
+        onChange={handleInputChange}
+      />
+      <VehicleInput
+        css="vehicleinput model"
+        id="model"
+        vehicleId={vehicle._id}
+        value={model}
+        onChange={handleInputChange}
+      />
+      <VehicleInput
+        css="vehicleinput year"
+        id="year"
+        vehicleId={vehicle._id}
+        value={year}
+        onChange={handleInputChange}
+      />
       <JobList allJobs={vehicle.jobs} updateJobs={handleUpdateJob}/>
     </div>
   )

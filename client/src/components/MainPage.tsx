@@ -174,7 +174,7 @@ const MainPage = () => {
       <div className="menucontainer">
         <MenuBar />
       </div>
-      <div className="datadisplaycontainer"> 
+      <div className="allvehiclelist"> 
         <h4>Data Output</h4>
         {message ? <p>{message}</p> : ''}
         <VehicleList

@@ -1,12 +1,7 @@
 import React from 'react';
 import JobModel from '../../Models/JobModel';
 import JobList from './JobList';
-
-const makeStyles = () => {
-  return {
-    gridColumn: '2 / 2',
-  };
-}
+import '../../styles/AllJobsList.css'
 
 export interface AllJobListProps {
   allJobs: JobModel[] | null;
@@ -15,9 +10,9 @@ export interface AllJobListProps {
 
 export default function AllJobList(props: AllJobListProps) {
   const { allJobs, updateJobs } = props;
-  const styles = makeStyles();
+
   return (
-    <div style={styles}>
+    <div className="alljoblist">
       <h4>Job List</h4>
       <JobList allJobs={allJobs} updateJobs={updateJobs} />
     </div>

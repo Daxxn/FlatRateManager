@@ -1,0 +1,4 @@
+.alljoblist {
+  grid-column: 2 / 2;
+  background-color: var(--joblist-bg-color);
+}
