@@ -1,13 +1,13 @@
-/* .joblist {
-  text-align: left;
-  border: solid 1px #4187b6;
-  margin: 5px;
-  transition: background-color 0.2s;
-} */
-
-.joblist {
-  grid-column: 1 / 3;
+.jobContainer {
+  grid-column: 1 / -1;
   grid-row: 2;
+  display: grid;
+  grid-template:
+    "list selector" 100% / 1fr 1fr;
+}
+
+.jobLists {
+  grid-area: list;
 }
 
 .jobframe {
@@ -15,25 +15,8 @@
   grid-template:
     "jt ji" auto
     "tt ti" auto / auto 1fr;
-  text-align: left;
-  border: solid 0.2rem linear-gradient(300deg, rgba(0,99,255,1) 0%, rgba(49,223,255,1) 100%);
   margin: 0.2rem;
   padding: 4px;
-
-  background-size: 200%;
-  background-position: bottom left;
-  /* background-image: linear-gradient(353deg, rgba(37, 34, 195, 0.8) 0%, rgba(49,255,197,0.4) 98%); */
-  background-image:
-    linear-gradient(
-      353deg,
-      rgba(0,99,255,0.4) 0%,
-      rgba(49,223,255,0.02) 100%
-    );
-  transition: background-position 300ms;
-}
-
-.jobframe:hover, .jobframe:focus {
-  background-position: top right;
 }
 
 .jobtitle {
@@ -52,28 +35,7 @@
 
 .jobinput {
   grid-area: ji;
-  padding: 0.2rem;
-  background-color: rgba(255, 255, 255, 0.4);
-  transition: background-color 150ms;
 }
-
-.jobinput:hover, .jobinput:focus {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
 .timeinput {
   grid-area: ti;
-  padding: 0.2rem;
-  background-color: rgba(255, 255, 255, 0.4);
-  transition: background-color 150ms;
 }
-
-.timeinput:hover, .timeinput:focus {
-  background-color: rgba(0, 0, 0, 0.1);
-}
-
-/* .joblist:hover {
-  border: #4187b6 4px solid;
-  margin: 20px 5px 20px 5px;
-  background-color: #d3d3d3;
-} */

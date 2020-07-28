@@ -7,12 +7,13 @@ import '../../styles/VehicleDisplay.css';
 
 export interface VehicleDisplayProps {
   vehicleProp: VehicleModel;
+  allJobs: JobModel[] | null;
   updateVehicle: (updatedVehicle: VehicleModel) => void;
   updateJobs: (updatedJob: JobModel) => void;
 }
 
 export default function VehicleDisplay(props: VehicleDisplayProps) {
-  const { vehicleProp, updateVehicle, updateJobs } = props;
+  const { vehicleProp, allJobs, updateVehicle, updateJobs } = props;
   const [vehicle, setVehicle] = useState(vehicleProp);
   const [make, setMake] = useState(vehicleProp.make);
   const [model, setModel] = useState(vehicleProp.model);
@@ -78,7 +79,7 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
         value={year}
         onChange={handleInputChange}
       />
-      <JobList allJobs={vehicle.jobs} updateJobs={handleUpdateJob}/>
+      <JobList isJobDisplay={false} currentJobs={vehicle.jobs} allJobs={allJobs} updateJobs={handleUpdateJob}/>
     </div>
   )
 }

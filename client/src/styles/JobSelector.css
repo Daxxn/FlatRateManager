@@ -1,0 +1,21 @@
+.jsContainer {
+  grid-area: selector;
+}
+
+.jsBase {
+  position: relative;
+}
+
+.jsDropDown {
+}
+
+.open {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.closed {
+  display: none;
+}

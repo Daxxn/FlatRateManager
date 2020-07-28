@@ -14,7 +14,7 @@ export default function AllJobList(props: AllJobListProps) {
   return (
     <div className="alljoblist">
       <h4>Job List</h4>
-      <JobList allJobs={allJobs} updateJobs={updateJobs} />
+      <JobList isJobDisplay currentJobs={allJobs} allJobs={null} updateJobs={updateJobs} />
     </div>
   )
 }

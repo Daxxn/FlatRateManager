@@ -3,22 +3,50 @@
   --vehiclelist-bg-color: #f0f5ff;
   --joblist-bg-color: #f0f8ff;
   --vehicle-bg-color: #f1f1f115;
+  --logo-bg-color: rgb(49, 235, 167);
+  --app-bg: .appbg;
 }
 
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
+.appbg {
+  background-image: linear-gradient(white 50%, var(--logo-bg-color) 50%);
+  animation: my-logo-ani 5s infinite;
+}
+
+.appcontainer {
+  display: fixed;
+  grid-template-columns: 1fr;
+}
+
+.logo-main {
+  text-align: center;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
+.logo-bg {
+  animation: my-logo-ani 2s linear infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.logo-fg {
+  width: 100vw;
+  top: 0;
+  left: 0;
+}
+
+.logo-fg:hover {
+  background-color: rgb(255, 255, 255);
+}
+
+/* @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
-}
+} */
 
 .App-header {
   background-color: #282c34;
@@ -36,6 +64,15 @@
 }
 
 @keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes my-logo-ani {
   from {
     transform: rotate(0deg);
   }

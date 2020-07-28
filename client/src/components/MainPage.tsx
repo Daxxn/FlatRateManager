@@ -11,7 +11,7 @@ import {
   postRequest,
   postBlankVehicle,
   // patchRequest,
-} from '../APIControls/ApiFetchMethods';
+} from '../logic/ApiFetchMethods';
 import AllJobList from './JobComponents/AllJobsList';
 
 const MainPage = () => {
@@ -175,9 +175,10 @@ const MainPage = () => {
         <MenuBar />
       </div>
       <div className="allvehiclelist"> 
-        <h4>Data Output</h4>
+        <h4>Vehicle List</h4>
         {message ? <p>{message}</p> : ''}
         <VehicleList
+          allJobs={allJobs}
           vehicles={allVehicles}
           updateVehicles={updateVehicle}
           updateJobs={updateJob}

@@ -1,33 +1,22 @@
 import React from 'react';
-import './App.css';
+import './styles/App.css';
 import MainPage from './components/MainPage.tsx';
 import banner from './banner-main.svg';
-import APIControl from './APIControls/APIControl';
+// import banner from './PointSpireTest_3.svg';
+// import bannerBg from './PointSpireTest_bg.svg';
 
 
 function App() {
-  const APIData = {
-    APIBase: 'http://localhost:9000',
-    APIVehicles: '/vehicles',
-    APIJobs: '/jobs',
-    methods: {
-      get: 'GET',
-      post: 'POST',
-      patch: 'PATCH',
-      delete: 'DELETE',
-    },
-    headers: {
-      'Content-Type': 'application/json',
-    }
-  };
-  const apiControl = new APIControl(APIData);
   return (
     <div className="App">
       <header>
-        <img src={banner} alt="Flat Rate Manager" />
+        <div className="logo-main">
+          {/* <img className="logo-bg" src={bannerBg} alt="Flat Rate Manager" /> */}
+          <img className="logo-fg" src={banner} alt="Flat Rate Manager" />
+        </div>
       </header>
       <div>
-        <MainPage URLBuilder={apiControl} />
+        <MainPage />
       </div>
     </div>
   );

@@ -1,10 +1,49 @@
+:root {
+  --theme-bg: #a2e8fa;
+  --theme-bg-rgb: rgb(162, 232, 250);
+  --theme-sec-bg: #fabca2;
+  --theme-sec-bg-rgb: rgb(250, 188, 162);
+  --input-bg-color: #8bcada;
+  --input-bg-color: rgba(139, 202, 218, 0.2);
+  --button-main-color: #fabca2;
+  --input-bg-focus: rgba(162, 232, 250, 0.4);
+  --base-trans-time: 250ms;
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family: 'Changa', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+  font-size: 16px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  all: unset;
+  border-radius: 0.4rem;
+  background-color: var(--button-main-color);
+  transition: background-color var(--base-trans-time) ease-in;
+}
+
+button:hover {
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+input {
+  all: unset;
+  margin: 0.2rem;
+  padding: 0.2rem;
+  min-width: 5vw;
+  max-width: 10vw;
+  /* background-color: rgba(0, 0, 0, 0.1); */
+  background-color: var(--input-bg-color);
+  transition: background-color var(--base-trans-time) ease-in;
+}
+
+input:focus {
+  background-color: var(--theme-bg-rgb);
 }
 
 code {
