@@ -62,7 +62,8 @@ app.use(function(err, req, res, next) {
   console.log(err);
   res.status(err.status || 500);
   res.json({
-    message: err,
+    message: err.message,
+    code: err.status,
   });
   //res.render('error');
 });

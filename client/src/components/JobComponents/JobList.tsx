@@ -1,19 +1,19 @@
 import React from 'react';
 import JobModel from '../../Models/JobModel';
 import JobDisplay from './JobDisplay';
-import '../../styles/JobDisplay.css';
+import '../../styles/JobList.css';
 import JobSelector from './JobSelector';
 
 export interface JobListProps {
-  isJobDisplay: boolean;
   currentJobs: JobModel[] | null;
   allJobs: JobModel[] | null;
   updateJobs: (updatedJob: JobModel) => void;
+  handleSelectedJobChange: (jobIds: string[]) => void;
 };
 
 
 export default function JobList(props: JobListProps) {
-  const { isJobDisplay, currentJobs, allJobs, updateJobs } = props;
+  const { currentJobs, allJobs, updateJobs, handleSelectedJobChange } = props;
 
   return (
     <div className="jobContainer">
@@ -26,11 +26,7 @@ export default function JobList(props: JobListProps) {
           <p className="noJob">No Jobs.</p>
         )}
       </div>
-      {!isJobDisplay ? (
-        <JobSelector allJobs={allJobs} />
-      ) : (
-        ''
-      )}
+      <JobSelector allJobs={allJobs} currentJobs={currentJobs} handleSelectedJobChange={handleSelectedJobChange} />
     </div>
   );
 }

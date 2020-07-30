@@ -8,14 +8,17 @@ const vehicleSchema = mongoose.Schema({
   jobs: [{type: ObjectId, ref: 'JobModel', default: []}],
 });
 
-vehicleSchema.post('find', async (vehicles) => {
-  for (let vehicle of vehicles) {
-    await vehicle.populate('jobs').execPopulate();
-  }
-});
+// vehicleSchema.post('find', async (vehicles) => {
+//   for (let vehicle of vehicles) {
+//     await vehicle.populate('jobs').execPopulate();
+//   }
+// });
 
-vehicleSchema.post('findOne', async (vehicle) => {
-  await vehicle.populate('jobs').execPopulate();
-})
+// vehicleSchema.post('findOne', async (vehicle) => {
+//   if (vehicle) {
+//     console.log(this);
+//     await this.populate('jobs').execPopulate();
+//   }
+// })
 
 module.exports = mongoose.model('VehicleModel', vehicleSchema);

@@ -1,13 +1,24 @@
 :root {
   --theme-bg: #a2e8fa;
+  --theme-dark-bg: #64c7e0;
   --theme-bg-rgb: rgb(162, 232, 250);
   --theme-sec-bg: #fabca2;
   --theme-sec-bg-rgb: rgb(250, 188, 162);
   --input-bg-color: #8bcada;
   --input-bg-color: rgba(139, 202, 218, 0.2);
-  --button-main-color: #fabca2;
+  --button-main-color: rgb(250, 188, 162);
+  --button-focus-color: rgba(250, 188, 162, 0.4);
   --input-bg-focus: rgba(162, 232, 250, 0.4);
   --base-trans-time: 250ms;
+
+  
+  /* --menubar-bg-color: #4f6ead; */
+  --menubar-bg-color: var(--theme-dark-bg);
+  --vehiclelist-bg-color: #f0f5ff;
+  --joblist-bg-color: #f0f8ff;
+  --vehicle-bg-color: #f1f1f115;
+  --logo-bg-color: rgb(49, 235, 167);
+  --app-bg: .appbg;
 }
 
 body {
@@ -28,7 +39,7 @@ button {
 }
 
 button:hover {
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: var(--button-focus-color);
 }
 
 input {

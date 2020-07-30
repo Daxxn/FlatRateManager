@@ -7,6 +7,41 @@
 }
 
 .jsDropDown {
+  background-color: var(--theme-bg-rgb);
+  z-index: 1;
+  width: 100%;
+}
+
+.jslist {
+  all: unset;
+  list-style-type: none;
+}
+
+.closeBtn {
+  width: 100%;
+}
+
+.jsJobItem {
+  background-color: var(--input-bg-color);
+}
+
+.jsCheckBox {
+  display: none;
+  background-color: blue;
+  vertical-align: middle;
+  top: 0;
+  left: 0;
+  height: 1em;
+  width: 1em;
+  margin: 0.2em;
+}
+
+.jsCheckBoxChecked {
+  display: inline-block;
+}
+
+.jsJobItem:hover {
+  background-color: var(--input-bg-focus);
 }
 
 .open {

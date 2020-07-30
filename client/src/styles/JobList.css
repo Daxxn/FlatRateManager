@@ -1,0 +1,15 @@
+.jobContainer {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  display: grid;
+  grid-template:
+    "list selector" 100% / 1fr 1fr;
+}
+
+.jobLists {
+  grid-area: list;
+}
+
+.noJob {
+  color: red;
+}

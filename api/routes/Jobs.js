@@ -2,14 +2,21 @@ const express = require('express');
 const router = express.Router();
 const JobModel = require('../models/JobModel');
 const VehicleModel = require('../models/VehicleModel');
+const { response } = require('express');
 
 function findJobById(jobId) {
   return new Promise((resolve, reject) => {
-    JobModel.findById(jobId).exec((err, foundJob) => {
+    JobModel
+    .findOne({ _id: jobId })
+    .exec((err, foundJob) => {
       if(err) {
+        if (err.message.startsWith('Cast to ObjectId failed')) {
+          reject(null);
+        }
         reject(err);
       } else if (foundJob === (undefined || null)) {
-        reject(new Error('No job found.'));
+        // reject(new Error('No job found.'));
+        reject(null);
       } else {
         resolve(foundJob);
       }
@@ -17,43 +24,20 @@ function findJobById(jobId) {
   });
 }
 
-function findVehicleById(vehicleId) {
-  return new Promise((resolve, reject) => {
-    VehicleModel
-      .findById(vehicleId)
-      .exec((err, foundVehicle) => {
-        if (err) {
-          reject(err);
-        } else if (foundVehicle === (undefined || null)) {
-          reject(new Error('No vehicle found.'));
-        } else {
-          resolve(foundVehicle);
-        }
-      })
-  })
-}
-
-const buildJob = (body) => {
-  if (body.job && body.time) {
-    if (body._id) {
-      delete body._id;
-    }
-    const newJob = new JobModel(body);
-    return newJob.save();
-  } else {
-    throw new Error('job and time must be defined.');
-  }
-}
-
-function findManyJobs(jobIds) {
+const findManyJobs = (jobIds) => {
   const promises = [];
   for (const jobId of jobIds) {
     promises.push(findJobById(jobId));
   }
   return Promise.all(promises);
+};
+
+const updateJob = async (dbJob, newJob) => {
+  Object.assign(dbJob, newJob);
+  return dbJob.save();
 }
 
-function patchMany(req, next) {
+const patchMany = (req, next) => {
   if(req.body.ids && req.body.jobs) {
     findManyJobs(req.body.ids)
       .then((foundJobs) => {
@@ -65,11 +49,15 @@ function patchMany(req, next) {
         return foundJobs;
       })
   } else {
-    next(new Error('Either id array or job array is not defined.'));
+    // next(new Error('Either id array or job array is not defined.'));
+    next({
+      message: 'Either id array or job array is not defined.',
+      code: 400,
+    });
   }
-}
+};
 
-router.get('/', (req, res) => {
+router.get('/', (req, res, next) => {
   if (req.body !== undefined) {
     delete req.body;
   }
@@ -78,56 +66,52 @@ router.get('/', (req, res) => {
       res.status(200).json(jobs);
     })
     .catch((err) => {
-      res.status(500).json(err);
+      // res.status(500).json(err);
+      next({
+        message: err.message,
+        code: 500,
+      });
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', (req, res, next) => {
   findJobById(req.params.id)
     .then((job) => {
       res.status(200).json(job);
     })
     .catch((err) => {
-      res.status(500).json(err);
-    });
-});
-
-router.post('/:vehicleId', (req, res, next) => {
-  findJobById(req.params.vehicleId)
-    .then((job) => {
-      if (req.body) {
-        if (!req.body._id) {
-          delete req.body._id;
-        }
-        const newJob = new JobModel(req.body);
-        return newJob.save();
+      // res.status(500).json(err);
+      if (err) {
+        next({
+          message: err.message,
+          code: 500,
+        });
       } else {
-        throw new Error('body must be an object with assignable parameters.');
+        next({
+          message: `No Job found: ${req.params.id}`,
+          code: 400,
+        });
       }
-    })
-    .then((savedJob) => {
-      res.status(200).json(savedJob);
-    })
-    .catch((err) => {
-      next(err);
     });
 });
 
-router.post('/:vehicleId/test', async (req, res, next) => {
-  const newJob = await buildJob(req.body);
-  findVehicleById(req.params.vehicleId)
-    .then((vehicle) => {
-      vehicle.jobs.push(newJob._id);
-      console.log(vehicle);
-      return vehicle.save();
-    })
-    .then((savedVehicle) => {
-      res.status(200).json(savedVehicle);
-    })
-    .catch((err) => {
-      next(err);
-    })
-})
+router.post('/blank', async (req, res, next) => {
+  try {
+    const newJob = new JobModel({
+      job: 'blank',
+      time: 0,
+    });
+    res.status(200).json(await newJob.save());
+  } catch (err) {
+    // res.status(500).json({
+    //   message: err,
+    // });
+    next({
+      message: err.message,
+      code: 500,
+    });
+  }
+});
 
 router.post('/', (req, res, next) => {
   if (req.body) {
@@ -140,43 +124,89 @@ router.post('/', (req, res, next) => {
         res.status(200).json(savedJob);
       })
       .catch((err) => {
-        next(err);
-      });
-  } else {
-    next(new Error('body must be an object with assignable parameters.'));
-  }
-})
-
-router.patch('/:id', (req, res, next) => {
-  if (req.params.id === 'many') {
-    const response = patchMany(req, next);
-    res.status(200).json({
-      message: "saved",
-      data: response});
-  } else {
-    findJobById(req.params.id)
-      .then((job) => {
-        if (req.body) {
-          job = Object.assign(job, req.body);
-          job.save();
-          //res.status(200).json(job);
-          res.status(200).json({
-            message: "saved",
-            data: job,
-          });
-        } else {
-          throw new Error('body must be an object with assignable parameters.');
-        }
-      })
-      .catch((err) => {
-        //next(err);
-        res.status(500).json({
-          message: 'ERROR',
-          data: err,
+        next({
+          message: err.message,
+          code: 500,
         });
       });
+  } else {
+    // next(new Error('body must be an object with assignable parameters.'));
+    next({
+      message: 'body must be an object with assignable parameters.',
+      code: 400,
+    });
   }
 });
+
+// Many portion still isnt working yet.
+router.patch('/:id', async (req, res, next) => {
+  if (req.params.id === 'many') {
+    console.log(req.body);
+    const allfoundJobs = await findManyJobs(req.body);
+    const workingJobs = [];
+    allfoundJobs.forEach(job => {
+      const newJob = req.body.find(j => j._id === job._id);
+      console.log(newJob);
+      workingJobs.push(updateJob(job, newJob));
+    });
+    const updatedJobs = await Promise.all(workingJobs);
+    res.status(200).json(updatedJobs);
+  } else {
+    try {
+      const foundJob = await findJobById(req.params.id);
+      Object.assign(foundJob, req.body);
+      const savedJob = await foundJob.save();
+      res.status(200).json(savedJob);
+    } catch (err) {
+      if (err) {
+        next({
+          message: err.message,
+          code: 500,
+        });
+      } else {
+        next({
+          message: `No job found: ${req.params.id}`,
+          code: 400,
+        });
+      }
+    }
+  }
+});
+
+// /**
+//  * requires refactor.
+//  */
+// router.patch('/:id', (req, res, next) => {
+//   if (req.params.id === 'many') {
+//     const response = patchMany(req, next);
+//     // res.status(200).json({
+//     //   message: "saved",
+//     //   data: response});
+//     res.status(200).json(response);
+//   } else {
+//     findJobById(req.params.id)
+//       .then((job) => {
+//         if (req.body) {
+//           job = Object.assign(job, req.body);
+//           job.save();
+//           res.status(200).json(job);
+//           // res.status(200).json({
+//           //   message: "saved",
+//           //   data: job,
+//           // });
+//         } else {
+//           throw new Error('body must be an object with assignable parameters.');
+//         }
+//       })
+//       .catch((err) => {
+//         //next(err);
+//         res.status(500).json({
+//           message: 'ERROR',
+//           data: err,
+//         });
+//       });
+//   }
+// });
 
 // router.patch('/many/', (req, res, next) => {
 //   if(req.body.ids && req.body.jobs) {
@@ -199,8 +229,11 @@ router.delete('/:id', (req, res, next) => {
       res.status(200).json(delJob);
     })
     .catch((err) => {
-      next(err);
+      next({
+        message: err.message,
+        code: 500,
+      });
     })
-})
+});
 
 module.exports = router;

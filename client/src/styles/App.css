@@ -1,12 +1,3 @@
-:root {
-  --menubar-bg-color: #4f6ead;
-  --vehiclelist-bg-color: #f0f5ff;
-  --joblist-bg-color: #f0f8ff;
-  --vehicle-bg-color: #f1f1f115;
-  --logo-bg-color: rgb(49, 235, 167);
-  --app-bg: .appbg;
-}
-
 .App {
   text-align: center;
 }

@@ -7,9 +7,12 @@ import MenuBar from './MenuBar';
 import {
   getVehicles,
   getJobs,
-  getVehicle,
-  postRequest,
   postBlankVehicle,
+  postBlankJob,
+  patchVehicle,
+  patchJob,
+  // getVehicle,
+  // postRequest,
   // patchRequest,
 } from '../logic/ApiFetchMethods';
 import AllJobList from './JobComponents/AllJobsList';
@@ -18,7 +21,10 @@ const MainPage = () => {
   const [allVehicles, setAllVehicles] = useState<VehicleModel[] | null>(null);
   const [allJobs, setAllJobs] = useState<JobModel[] | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  // Need to implement status code still.
+  const [statusCode, setStatusCode] = useState<number>(0);
 
+  //#region Initial Page Load
   useEffect(() => {
     getAllVehicles();
     getAllJobs();
@@ -31,6 +37,7 @@ const MainPage = () => {
       })
       .catch(err => {
         setMessage(err.message);
+        setStatusCode(err.status);
       });
   };
 
@@ -41,14 +48,15 @@ const MainPage = () => {
       setMessage(err.message);
     }
   };
+  //#endregion
 
-  const getOneVehicle = async (id: string) => {
-    try {
-      console.log(await getVehicle(id));
-    } catch (err) {
-      setMessage(err.message);
-    }
-  }
+  // const getOneVehicle = async (id: string) => {
+  //   try {
+  //     console.log(await getVehicle(id));
+  //   } catch (err) {
+  //     setMessage(err.message);
+  //   }
+  // }
 
   // const patchVehicles = async (vehicles: VehicleModel[]) => {
   //   try {
@@ -59,116 +67,91 @@ const MainPage = () => {
   //   }
   // };
 
-  // const postVehicle = async (newVehicle: VehicleModel) => {
+  // const patchVehicle = async (vehicle: VehicleModel) => {
   //   try {
-  //     const vehicle = await postRequest<VehicleModel>(newVehicle, 'vehicles');
-  //     console.log(vehicle);
-  //     return await (vehicle as VehicleModel);
+  //     const updatedVehicle = await 
   //   } catch (err) {
-  //     setMessage(err.message);
+      
   //   }
   // };
 
-  const postVehicle = (newVehicle: VehicleModel) => {
-    return postRequest<VehicleModel>(newVehicle, 'vehicles')
-      .then(vehicle => vehicle)
-      .catch(err => setMessage(err.message));
-  };
+  // const postVehicle = (newVehicle: VehicleModel) => {
+  //   return postRequest<VehicleModel>(newVehicle, 'vehicles')
+  //     .then(vehicle => vehicle)
+  //     .catch(err => setMessage(err.message));
+  // };
 
-  const postJob = async (newJob: JobModel) => {
+  // const postNewJob = async (newJob: JobModel) => {
+  //   try {
+  //     const job = await postBlankJob();
+  //     console.log(job);
+  //   } catch (err) {
+  //     setMessage(err.message);
+  //   }
+  // }
+  
+  const createNewVehicle = () => {
+    if (allVehicles) {
+      postBlankVehicle()
+      .then(vehicle => {
+        if (vehicle) {
+          const tempVehicles = [...allVehicles , vehicle];
+          setAllVehicles(tempVehicles);
+        }
+      })
+      .catch(err => {
+        setMessage(err.message);
+      });
+    }
+  }
+  //#endregion
+
+  const createNewJob = async () => {
     try {
-      const job = await postRequest<JobModel>(newJob, 'jobs');
-      console.log(job);
+      const newJob = await postBlankJob();
+      const tempJobs = allJobs;
+      tempJobs?.push(newJob);
+      setAllJobs(tempJobs);
     } catch (err) {
       setMessage(err.message);
     }
   }
   //#endregion
 
-  // const createNewVehicle = () => {
-  //   const newVehicle = new VehicleModel('', 'blank', 'blank', 0, []);
-  //   const vehicleRes = postVehicle(newVehicle).then(vehicle => vehicle).catch(err => setMessage(err));
-  //   if (vehicleRes) {
-  //     const tempVehicles = allVehicles ? allVehicles : [];
-  //     tempVehicles.push(vehicleRes);
-  //     setAllVehicles(tempVehicles);
-  //   }
-  // }
-
-  const createNewVehicle = () => {
-    if (allVehicles) {
-      postBlankVehicle()
-        .then(vehicle => {
-          if (vehicle) {
-            const tempVehicles = [...allVehicles , vehicle];
-            setAllVehicles(tempVehicles);
-          }
-        })
-        .catch(err => {
-          setMessage(err.message);
-        });
-    }
-  }
-
-  const createNewJob = (vehicle: VehicleModel) => {
-    if (allVehicles) {
-      const index = allVehicles?.findIndex(v => v._id === vehicle._id);
-      const job = new JobModel(' ', 'new Job', 0);
-      const tempVehicles = allVehicles;
-      tempVehicles[index].jobs.push(job);
-      setAllVehicles(tempVehicles);
-    }
-  }
-  //#endregion
-
   //#region Update functions
-  const updateVehicle = (updatedVehicle: VehicleModel) => {
+  const updateVehicle = async (updatedVehicle: VehicleModel) => {
     console.log('in Update vehicle');
+    console.log(updatedVehicle);
     if (allVehicles) {
-      const tempvehicles = allVehicles;
-      const index = tempvehicles?.findIndex(vehicle => vehicle._id === updatedVehicle._id);
-      tempvehicles[index] = Object.assign(tempvehicles[index], updatedVehicle);
-      setAllVehicles(tempvehicles);
-    }
-  };
-
-  const updateJob = (updatedJob: JobModel) => {
-    if (allJobs) {
-      const tempJobs = allJobs;
-      const index = tempJobs?.findIndex(job => job._id === updatedJob._id);
-      tempJobs[index] = Object.assign(tempJobs[index], updatedJob);
-      setAllJobs(tempJobs);
-    }
-  };
-  //#endregion
-  
-  //#region Helper Methods:
-  /**
-   * Searches 4 nodes up the DOM tree to find a valid id.
-   * Only used during list click events.
-   * Not verry useful and kinda wasteful use
-   * onSelected event instead.
-   *
-   * @param {Object} target initial HTML element from event
-   */
-  const findObjectID = (target: any): string => {
-    let parent = target;
-    for(let i = 0; i < 5; i++) {
-      if (parent.id !== '') {
-        return parent.id;
-      } else {
-        parent = parent.parentElement;
+      try {
+        const tempvehicles = allVehicles;
+        const returnedVehicle = await patchVehicle(updatedVehicle);
+        console.log(returnedVehicle);
+        const index = tempvehicles?.findIndex(vehicle => vehicle._id === updatedVehicle._id);
+        tempvehicles[index] = Object.assign(tempvehicles[index], returnedVehicle);
+        setAllVehicles(tempvehicles);
+      } catch (err) {
+        setMessage(err.message);
       }
     }
-    setMessage('Could not find an id.');
-    return '';
-  }
+  };
 
-  const findObject = (id: string, array: Array<VehicleModel|JobModel>): VehicleModel|JobModel => {
-    return array.find(veh => veh._id === id) as VehicleModel|JobModel;
-  }
+  const updateJob = async (updatedJob: JobModel) => {
+    if (allJobs) {
+      try {
+        const tempJobs = allJobs;
+        const returnedJob = await patchJob(updatedJob);
+        const index = tempJobs?.findIndex(job => job._id === updatedJob._id);
+        tempJobs[index] = Object.assign(tempJobs[index], returnedJob);
+        setAllJobs(tempJobs);
+      } catch (err) {
+        setMessage(err.message);
+      }
+    }
+  };
   //#endregion
 
+  //#region JSX
   return (
     <div className="maincontainer">
       <div className="menucontainer">
@@ -185,9 +168,10 @@ const MainPage = () => {
           addNewVehicle={createNewVehicle}
         />
       </div>
-      <AllJobList allJobs={allJobs} updateJobs={updateJob} />
+      <AllJobList allJobs={allJobs} updateJobs={updateJob} newJob={createNewJob} />
     </div>
   );
+  //#endregion
 }
 
 export default MainPage;

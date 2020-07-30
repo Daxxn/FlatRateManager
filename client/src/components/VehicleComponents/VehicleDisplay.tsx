@@ -14,18 +14,19 @@ export interface VehicleDisplayProps {
 
 export default function VehicleDisplay(props: VehicleDisplayProps) {
   const { vehicleProp, allJobs, updateVehicle, updateJobs } = props;
-  const [vehicle, setVehicle] = useState(vehicleProp);
+  // const [vehicle, setVehicle] = useState(vehicleProp);
   const [make, setMake] = useState(vehicleProp.make);
   const [model, setModel] = useState(vehicleProp.model);
   const [year, setYear] = useState(vehicleProp.year);
 
-  const updateState = () => {
-    const newVehicle = vehicle;
-    newVehicle.make = make;
-    newVehicle.model = model;
-    newVehicle.year = year;
-    setVehicle(newVehicle);
-  }
+  // const updateState = () => {
+  //   const newVehicle = vehicle;
+  //   newVehicle.make = make;
+  //   newVehicle.model = model;
+  //   newVehicle.year = year;
+  //   setVehicle(newVehicle);
+  //   // updateVehicle(newVehicle);
+  // }
 
   const handleInputChange = (id: 'make' | 'model' | 'year', value: string | number) => {
     switch (id) {
@@ -41,8 +42,20 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
       default:
         throw new Error('Unknown ID!!');
     }
-    updateState();
+    // updateState();
   }
+
+  const handleSelectedJobChange = (currentJobs: string[]) => {
+    const newVehicle = vehicleProp;
+    const newJobs = allJobs?.filter(job => currentJobs.includes(job._id));
+    if (newJobs) {
+      newVehicle.jobs = newJobs;
+    } else {
+      newVehicle.jobs = [];
+    }
+    // setVehicle(newVehicle);
+    updateVehicle(newVehicle);
+  };
 
   /**
    * Remove later if needed.
@@ -52,34 +65,48 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
     updateJobs(updatedJob);
   }
 
+  const handleFocusChange = () => {
+    const newVehicle = vehicleProp;
+    newVehicle.make = make;
+    newVehicle.model = model;
+    newVehicle.year = year;
+    updateVehicle(newVehicle);
+  };
+
   return (
     <div
-      key={vehicle._id}
-      onBlur={() => updateVehicle(vehicle)}
+      key={vehicleProp._id}
+      // onBlur={() => updateVehicle(vehicle)}
+      onBlur={handleFocusChange}
       className="vehiclecontainer"
     >
       <VehicleInput
         css="vehicleinput make"
         id="make"
-        vehicleId={vehicle._id}
+        vehicleId={vehicleProp._id}
         value={make}
         onChange={handleInputChange}
       />
       <VehicleInput
         css="vehicleinput model"
         id="model"
-        vehicleId={vehicle._id}
+        vehicleId={vehicleProp._id}
         value={model}
         onChange={handleInputChange}
       />
       <VehicleInput
         css="vehicleinput year"
         id="year"
-        vehicleId={vehicle._id}
+        vehicleId={vehicleProp._id}
         value={year}
         onChange={handleInputChange}
       />
-      <JobList isJobDisplay={false} currentJobs={vehicle.jobs} allJobs={allJobs} updateJobs={handleUpdateJob}/>
+      <JobList
+        currentJobs={vehicleProp.jobs}
+        allJobs={allJobs}
+        updateJobs={handleUpdateJob}
+        handleSelectedJobChange={handleSelectedJobChange}
+      />
     </div>
   )
 }

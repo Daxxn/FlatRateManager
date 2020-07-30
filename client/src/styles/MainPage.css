@@ -32,3 +32,11 @@
   grid-column: 1 / 2;
   grid-row: 2;
 }
+
+.goodMessage {
+  background-color: palegreen;
+}
+
+.badMessage {
+  background-color: rgb(255, 77, 77);
+}

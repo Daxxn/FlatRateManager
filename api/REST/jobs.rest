@@ -1,1 +1,42 @@
+### Basic GET All Request
+
 GET http://localhost:9000/jobs
+
+### GOOD - GET Request Test
+
+GET http://localhost:9000/jobs/5ecc8c5af0ef9a226803a146
+
+### BAD - GET Request Test : Not an ObjectId string
+
+GET http://localhost:9000/jobs/bad
+
+### BAD - GET Request Test : Corrupted ObjectId string
+
+GET http://localhost:9000/jobs/5ecc8c5af0ef9a226803a147
+
+### POST New Job
+
+POST http://localhost:9000/jobs/blank
+Content-Type: application/json
+
+{}
+
+### PATCH Many Test
+
+PATCH http://localhost:9000/jobs/many
+Content-Type: application/json
+
+[
+  {
+    "_id": "5eca0a84aeb4491fbc493766",
+    "__v": "0",
+    "job": "different - many test",
+    "time": 101
+  },
+  {
+    "_id": "5eca0bb0b929863494c5d878",
+    "__v": "0",
+    "job": "jobs using ids - many test",
+    "time": 5001
+  }
+]
