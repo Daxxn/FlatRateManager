@@ -20,7 +20,7 @@ export default function JobList(props: JobListProps) {
       <div className="jobLists">
         {currentJobs && currentJobs.length > 0 ? currentJobs.map(job => {
           return (
-            <JobDisplay jobProp={job} updateJob={updateJobs} />
+            <JobDisplay key={`job-display-main-${job._id}`} jobProp={job} updateJob={updateJobs} />
           )
         }) : (
           <p className="noJob">No Jobs.</p>

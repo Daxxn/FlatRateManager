@@ -14,19 +14,9 @@ export interface VehicleDisplayProps {
 
 export default function VehicleDisplay(props: VehicleDisplayProps) {
   const { vehicleProp, allJobs, updateVehicle, updateJobs } = props;
-  // const [vehicle, setVehicle] = useState(vehicleProp);
   const [make, setMake] = useState(vehicleProp.make);
   const [model, setModel] = useState(vehicleProp.model);
   const [year, setYear] = useState(vehicleProp.year);
-
-  // const updateState = () => {
-  //   const newVehicle = vehicle;
-  //   newVehicle.make = make;
-  //   newVehicle.model = model;
-  //   newVehicle.year = year;
-  //   setVehicle(newVehicle);
-  //   // updateVehicle(newVehicle);
-  // }
 
   const handleInputChange = (id: 'make' | 'model' | 'year', value: string | number) => {
     switch (id) {
@@ -42,7 +32,6 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
       default:
         throw new Error('Unknown ID!!');
     }
-    // updateState();
   }
 
   const handleSelectedJobChange = (currentJobs: string[]) => {
@@ -53,7 +42,6 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
     } else {
       newVehicle.jobs = [];
     }
-    // setVehicle(newVehicle);
     updateVehicle(newVehicle);
   };
 
@@ -76,7 +64,6 @@ export default function VehicleDisplay(props: VehicleDisplayProps) {
   return (
     <div
       key={vehicleProp._id}
-      // onBlur={() => updateVehicle(vehicle)}
       onBlur={handleFocusChange}
       className="vehiclecontainer"
     >

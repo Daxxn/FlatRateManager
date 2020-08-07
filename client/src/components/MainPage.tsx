@@ -11,11 +11,9 @@ import {
   postBlankJob,
   patchVehicle,
   patchJob,
-  // getVehicle,
-  // postRequest,
-  // patchRequest,
 } from '../logic/ApiFetchMethods';
 import AllJobList from './JobComponents/AllJobsList';
+import StatusCode from './StatusCode';
 
 const MainPage = () => {
   const [allVehicles, setAllVehicles] = useState<VehicleModel[] | null>(null);
@@ -34,6 +32,7 @@ const MainPage = () => {
     getVehicles()
       .then(allVehicles => {
         setAllVehicles(allVehicles);
+        setStatusCode(200);
       })
       .catch(err => {
         setMessage(err.message);
@@ -44,52 +43,14 @@ const MainPage = () => {
   const getAllJobs = async () => {
     try {
       setAllJobs(await getJobs());
+      setStatusCode(200);
     } catch (err) {
+      setStatusCode(err.code);
       setMessage(err.message);
     }
   };
   //#endregion
 
-  // const getOneVehicle = async (id: string) => {
-  //   try {
-  //     console.log(await getVehicle(id));
-  //   } catch (err) {
-  //     setMessage(err.message);
-  //   }
-  // }
-
-  // const patchVehicles = async (vehicles: VehicleModel[]) => {
-  //   try {
-  //     const newVehicles = await patchRequest<VehicleModel[]>(vehicles, 'vehicles');
-  //     console.log(newVehicles);
-  //   } catch (err) {
-  //     setMessage(err.message);
-  //   }
-  // };
-
-  // const patchVehicle = async (vehicle: VehicleModel) => {
-  //   try {
-  //     const updatedVehicle = await 
-  //   } catch (err) {
-      
-  //   }
-  // };
-
-  // const postVehicle = (newVehicle: VehicleModel) => {
-  //   return postRequest<VehicleModel>(newVehicle, 'vehicles')
-  //     .then(vehicle => vehicle)
-  //     .catch(err => setMessage(err.message));
-  // };
-
-  // const postNewJob = async (newJob: JobModel) => {
-  //   try {
-  //     const job = await postBlankJob();
-  //     console.log(job);
-  //   } catch (err) {
-  //     setMessage(err.message);
-  //   }
-  // }
-  
   const createNewVehicle = () => {
     if (allVehicles) {
       postBlankVehicle()
@@ -97,9 +58,11 @@ const MainPage = () => {
         if (vehicle) {
           const tempVehicles = [...allVehicles , vehicle];
           setAllVehicles(tempVehicles);
+          setStatusCode(200);
         }
       })
       .catch(err => {
+        setStatusCode(err.code);
         setMessage(err.message);
       });
     }
@@ -112,7 +75,10 @@ const MainPage = () => {
       const tempJobs = allJobs;
       tempJobs?.push(newJob);
       setAllJobs(tempJobs);
+      setStatusCode(200);
+
     } catch (err) {
+      setStatusCode(err.code);
       setMessage(err.message);
     }
   }
@@ -130,8 +96,10 @@ const MainPage = () => {
         const index = tempvehicles?.findIndex(vehicle => vehicle._id === updatedVehicle._id);
         tempvehicles[index] = Object.assign(tempvehicles[index], returnedVehicle);
         setAllVehicles(tempvehicles);
+        setStatusCode(200);
       } catch (err) {
         setMessage(err.message);
+        setStatusCode(err.code);
       }
     }
   };
@@ -144,8 +112,10 @@ const MainPage = () => {
         const index = tempJobs?.findIndex(job => job._id === updatedJob._id);
         tempJobs[index] = Object.assign(tempJobs[index], returnedJob);
         setAllJobs(tempJobs);
+        setStatusCode(200);
       } catch (err) {
         setMessage(err.message);
+        setStatusCode(err.code);
       }
     }
   };
@@ -157,9 +127,10 @@ const MainPage = () => {
       <div className="menucontainer">
         <MenuBar />
       </div>
-      <div className="allvehiclelist"> 
+      <div className="allvehiclelist">
         <h4>Vehicle List</h4>
         {message ? <p>{message}</p> : ''}
+        <StatusCode statusCode={statusCode} message={message} />
         <VehicleList
           allJobs={allJobs}
           vehicles={allVehicles}

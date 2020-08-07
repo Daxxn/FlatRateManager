@@ -66,7 +66,6 @@ router.get('/', (req, res, next) => {
       res.status(200).json(jobs);
     })
     .catch((err) => {
-      // res.status(500).json(err);
       next({
         message: err.message,
         code: 500,
@@ -80,7 +79,6 @@ router.get('/:id', (req, res, next) => {
       res.status(200).json(job);
     })
     .catch((err) => {
-      // res.status(500).json(err);
       if (err) {
         next({
           message: err.message,
@@ -103,9 +101,6 @@ router.post('/blank', async (req, res, next) => {
     });
     res.status(200).json(await newJob.save());
   } catch (err) {
-    // res.status(500).json({
-    //   message: err,
-    // });
     next({
       message: err.message,
       code: 500,

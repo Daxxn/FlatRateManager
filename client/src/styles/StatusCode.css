@@ -1,0 +1,18 @@
+.statusCodeBase {
+  background-color: attr(status);
+  margin: 0;
+  padding: 0;
+}
+
+.statusGood {
+  background-color: green;
+}
+
+.statusBad {
+  background-color: Red;
+}
+
+.statusCodeText {
+  font-size: 1.25rem;
+  font-weight: 700;
+}

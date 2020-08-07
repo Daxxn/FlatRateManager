@@ -21,12 +21,10 @@ function findVehicleById(vehicleId) {
 
 router.get('/', async (req, res, next) => {
   try {
-    const vehicles = await VehicleModel.find();
+    const vehicles = await VehicleModel.find().populate('jobs');
     console.log(vehicles);
-    res.json(vehicles);
+    res.status(200).json(vehicles);
   } catch (err) {
-    // res.json({message: err});
-    // next(err);
     next({
       message: err.message,
       code: 500,
@@ -57,7 +55,6 @@ router.get('/:id', (req, res) => {
         }
       });
   } catch (err) {
-    // res.status(500).json(err);
     next({
       message: err.message,
       code: 500,
@@ -101,10 +98,6 @@ router.post('/', async (req, res, next) => {
         const resVehicle = await newVehicle.save();
         res.status(200).json(resVehicle);
       } catch (err) {
-        // res.status(500).json({
-        //   message: err.message,
-        //   code: 500,
-        // });
         next({
           message: err.message,
           code: 500,
@@ -112,11 +105,6 @@ router.post('/', async (req, res, next) => {
       }
     }
   } else {
-    // console.log(req.body);
-    // res.status(405).json({
-    //   message: "Body is missing required values.",
-    //   code: 400,
-    // });
     next({
       message: "Body is missing required values.",
       code: 400,
@@ -133,10 +121,6 @@ router.patch('/:id', async (req, res, next) => {
       const savedVehicle = await foundVehicle.save();
       res.status(200).json(savedVehicle);
     } else {
-      // res.status(400).json({
-      //   message: `No vehicle found: ${req.params.id}`,
-      //   code: 400,
-      // });
       next({
         message: `No vehicle found: ${req.params.id}`,
         code: 400,
@@ -158,10 +142,6 @@ router.delete('/:id', (req, res) => {
       res.status(200).json(delVehicle);
     })
     .catch((err) => {
-      // res.status(500).json({
-      //   message: err.message,
-      //   code: 500,
-      // });
       next({
         message: err.message,
         code: 500,

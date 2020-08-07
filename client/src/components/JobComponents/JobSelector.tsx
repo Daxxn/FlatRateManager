@@ -24,7 +24,6 @@ const JobSelector = (props: JobSelectorProps): JSX.Element => {
   const [selectedJobs, setSelectedJobs] = useState<string[]>(filterJobsById(currentJobs));
 
   const handleJobSelect = (id: string) => {
-    // console.log(id);
     const newSelectedJobs = selectedJobs;
     if (selectedJobs.includes(id)) {
       const index = selectedJobs.findIndex(job => job === id);
@@ -46,7 +45,6 @@ const JobSelector = (props: JobSelectorProps): JSX.Element => {
               {allJobs?.map(job => (
                 <li className="jsJobItem" id={job._id} onClick={() => handleJobSelect(job._id)} key={`dd-item-${job._id}`}>
                   <div className={`jsCheckBox ${selectedJobs?.includes(job._id) ? 'jsCheckBoxChecked' : ''}`}></div>
-                  {/* <input className="jsCheckBox" type="checkbox" checked></input> */}
                   {job.job}
                 </li>
                 ))}
