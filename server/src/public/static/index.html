@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<head>
+  <title>Repair Order Tracker API</title>
+  <style>
+    body {
+      margin: 0;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Poppins', sans-serif, monospace;
+      background-color: #26263b;
+      color: #f5f5f5;
+      text-align: center;
+      display: flex;
+      justify-content: stretch;
+      flex-flow: column nowrap;
+    }
+    .title {
+      color: #3e9fcc;
+    }
+    .content {
+      padding: 0.5rem;
+    }
+    .desc {
+      text-align: left;
+    }
+    .list-label {
+      text-align: left;
+      padding: 0;
+    }
+    ul {
+      text-align: left;
+      margin-top: 0;
+    }
+
+    .footer {
+      background-color: #2b2b4b;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 1rem 0;
+      display: flex;
+      flex-flow: row nowrap;
+      justify-content: space-evenly;
+    }
+
+    .link-box {
+      all: unset;
+      background-color: #3f6679;
+      padding: 1rem;
+      border-radius: 0.2rem;
+      transition: background-color ease-in 200ms;
+    }
+
+    .link-box:hover {
+      background-color: #437188;
+    }
+  </style>
+  <script>
+    const handleLinkClick = (name, newTab = true) => {
+      const elem = document.getElementById(name);
+      window.open(elem.getAttribute('lnk'), newTab ? '_blank' : '_self');
+    };
+  </script>
+</head>
+<body>
+  <h1 class="title">Flat Rate Tracker Server</h1>
+
+  <div class="content">
+    <p class="desc">
+      Simplified version of the `Repair Order Tracker` (<a
+        href="https://github.com/Daxxn/RepairOrderTrackerClient"
+        target="_blank"
+      >
+        Client
+      </a>
+      &
+      <a
+        href="https://github.com/Daxxn/RepairOrderTrackerServer"
+        target="_blank"
+      >
+        Server </a
+      >) . The full project is still on the books but it needs some major
+      changes and I need to get this up and running. I let scope creep get its
+      teeth into it. This is the lean mean version.
+    </p>
+
+    <p class="list-label">Some of the main design goals:</p>
+    <ul>
+      <li>Fast and easy data entry</li>
+      <li>Simple data structure that can be easily extended</li>
+      <li>Metrics for graphing and displaying times for each job or person</li>
+    </ul>
+  </div>
+
+  <div class="footer">
+    <button
+      id="git-link"
+      lnk="https://github.com/Daxxn/FlatRateManager"
+      class="link-box"
+      onclick="handleLinkClick('git-link')"
+    >
+      Github Repo
+    </button>
+    <button
+      id="client-link"
+      lnk="http://localhost:3000"
+      class="link-box"
+      onclick="handleLinkClick('client-link')"
+    >
+      Client
+    </button>
+    <button
+      id="swagger-link"
+      lnk="/api"
+      class="link-box"
+      onclick="handleLinkClick('swagger-link', false)"
+    >
+      Swagger
+    </button>
+  </div>
+</body>
